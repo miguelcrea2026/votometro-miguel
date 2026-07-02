@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Painel Admin • Votômetro do Miguel</title>
+<style>
+  :root{--azul:#0a6ebd;--azul-esc:#074f8a;--verde:#20c997;--verde-esc:#0f9e79;--tinta:#0c2233;--sombra:0 10px 30px rgba(7,79,138,.15)}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:'Segoe UI',system-ui,sans-serif;color:var(--tinta);background:#eef5fb}
+  .top{background:linear-gradient(135deg,var(--azul),#37b6f0);color:#fff;padding:18px 20px;display:flex;align-items:center;gap:10px}
+  .top b{font-size:19px}
+  .wrap{max-width:1000px;margin:0 auto;padding:18px}
+  .card{background:#fff;border-radius:18px;box-shadow:var(--sombra);padding:20px;margin-bottom:16px}
+  h2,h3{margin:0 0 12px}
+  input{width:100%;padding:12px;border:2px solid #e2edf6;border-radius:10px;font-size:16px}
+  button{cursor:pointer;border:0;border-radius:10px;font-weight:700;padding:10px 16px;color:#fff;font-size:14px}
+  .btn-azul{background:var(--azul)}
+  .btn-verde{background:var(--verde-esc)}
+  .btn-vermelho{background:#d64545}
+  .btn-ghost{background:#eef5fb;color:var(--azul-esc)}
+  .hidden{display:none!important}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+  .kpi{background:linear-gradient(135deg,#f7fbfe,#eaf6ff);border-radius:14px;padding:16px;text-align:center}
+  .kpi .n{font-size:32px;font-weight:800;color:var(--azul-esc)}
+  .kpi .l{font-size:12px;color:#5b7180}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{text-align:left;padding:10px;border-bottom:1px solid #eef2f6}
+  th{color:#5b7180;font-size:12px;text-transform:uppercase}
+  .thumb{width:52px;height:52px;object-fit:cover;border-radius:8px;background:#eef2f6;cursor:pointer}
+  .tag{font-size:11px;padding:3px 8px;border-radius:20px;font-weight:700}
+  .tag.ok{background:#e6f8f1;color:var(--verde-esc)}
+  .muted{color:#5b7180;font-size:13px}
+  .bar{height:22px;background:#e6f2fb;border-radius:20px;overflow:hidden;margin:10px 0}
+  .bar > div{height:100%;background:linear-gradient(90deg,var(--azul),var(--verde));width:0;transition:width .8s}
+  .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+  .modal img{max-width:100%;max-height:90vh;border-radius:12px}
+</style>
+</head>
+<body>
+<div class="top"><span style="font-size:24px">💧</span><b>Painel Admin — Votômetro do Miguel</b></div>
+
+<div class="wrap">
+
+  <div id="telaSenha" class="card">
+    <h2>🔒 Área restrita</h2>
+    <p class="muted">Senha de administrador da campanha.</p>
+    <input id="inSenha" type="password" placeholder="Senha de admin" />
+    <p id="erro" class="muted" style="color:#d64545;height:16px"></p>
+    <button class="btn-azul" onclick="entrar()">Entrar</button>
+  </div>
+
+  <div id="painel" class="hidden">
+    <div class="card">
+      <h3>🎯 Progresso da meta</h3>
+      <div class="kpis">
+        <div class="kpi"><div class="n" id="kTotal">0</div><div class="l">Votos confirmados</div></div>
+        <div class="kpi"><div class="n" id="kFalta">10.000</div><div class="l">Faltam p/ meta</div></div>
+        <div class="kpi"><div class="n" id="kApoiadores">0</div><div class="l">Apoiadores ativos</div></div>
+        <div class="kpi"><div class="n" id="kPct">0%</div><div class="l">da meta (10.000)</div></div>
+      </div>
+      <div class="bar"><div id="bar"></div></div>
+    </div>
+
+    <div class="card">
+      <h3>🏆 Ranking completo</h3>
+      <div style="overflow-x:auto"><table id="tRank"><thead><tr><th>#</th><th>Apoiador</th><th>Pontos</th></tr></thead><tbody></tbody></table></div>
+    </div>
+
+    <div class="card">
+      <h3>🧾 Comprovantes recebidos</h3>
+      <p class="muted">Clique na foto para ampliar. Rejeitar libera o código e desconta o ponto de quem enviou.</p>
+      <div style="overflow-x:auto"><table id="tComp"><thead><tr><th>Foto</th><th>Código</th><th>Eleitor</th><th>Enviado por</th><th>Status</th><th></th></tr></thead><tbody></tbody></table></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal" id="modal" onclick="this.style.display='none'"><img id="modalImg" src="" alt=""></div>
+
+<script>
+  /* ⚙️ senha de admin — troque aqui */
+  const SENHA_ADMIN = "miguel-admin-2026";
+  const META = 10000;
+  /* ⚙️ mesma config do index.html */
+  const FIREBASE_CONFIG = {
+    apiKey: "COLE_AQUI",
+    authDomain: "COLE_AQUI",
+    projectId: "COLE_AQUI",
+    storageBucket: "COLE_AQUI",
+    messagingSenderId: "COLE_AQUI",
+    appId: "COLE_AQUI"
+  };
+  function entrar(){
+    if(document.getElementById('inSenha').value===SENHA_ADMIN){
+      document.getElementById('telaSenha').classList.add('hidden');
+      document.getElementById('painel').classList.remove('hidden');
+      window.dispatchEvent(new Event('adminok'));
+    } else { document.getElementById('erro').textContent='Senha incorreta'; }
+  }
+  window.entrar=entrar;
+  window.abrirImg=(u)=>{ if(!u)return; document.getElementById('modalImg').src=u; document.getElementById('modal').style.display='flex'; };
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, deleteDoc, collection, query, orderBy, limit, onSnapshot, runTransaction, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const DEMO = FIREBASE_CONFIG.apiKey === "COLE_AQUI";
+let fb=null;
+if(!DEMO){ const app=initializeApp(FIREBASE_CONFIG); fb={auth:getAuth(app), db:getFirestore(app)}; }
+
+function fmt(n){ return (n||0).toLocaleString('pt-BR'); }
+
+function pintar(total, apoiadores){
+  document.getElementById('kTotal').textContent=fmt(total);
+  document.getElementById('kFalta').textContent=fmt(Math.max(0,META-total));
+  document.getElementById('kApoiadores').textContent=fmt(apoiadores);
+  const pct=Math.min(100,(total/META)*100);
+  document.getElementById('kPct').textContent=pct.toFixed(1)+'%';
+  document.getElementById('bar').style.width=pct+'%';
+}
+
+async function rejeitar(codigo, uid){
+  if(!confirm('Rejeitar este comprovante? Libera o código e desconta 1 ponto.')) return;
+  if(DEMO){
+    const cods=JSON.parse(localStorage.getItem('demo_codigos')||'{}'); delete cods[codigo]; localStorage.setItem('demo_codigos',JSON.stringify(cods));
+    alert('No modo demo, o desconto de pontos não é aplicado. Configure o Firebase para o controle real.'); return;
+  }
+  try{
+    await runTransaction(fb.db, async(tx)=>{
+      tx.set(doc(fb.db,'apoiadores',uid),{pontos:increment(-1)},{merge:true});
+      tx.set(doc(fb.db,'stats','global'),{total:increment(-1)},{merge:true});
+    });
+    await deleteDoc(doc(fb.db,'comprovantes',codigo));
+  }catch(e){ alert('Erro ao rejeitar: '+e.message); }
+}
+window.__rejeitar=rejeitar;
+
+function iniciar(){
+  if(DEMO){
+    const lista=[]; for(let k in localStorage){ if(k.startsWith('demo_sup_')){ const d=JSON.parse(localStorage[k]); if(d) lista.push(d); } }
+    lista.sort((a,b)=>(b.pontos||0)-(a.pontos||0));
+    const stats=JSON.parse(localStorage.getItem('demo_stats')||'{"total":0}');
+    pintar(stats.total||0, lista.length);
+    document.querySelector('#tRank tbody').innerHTML = lista.map((s,i)=>`<tr><td>${i+1}</td><td>${s.nome}</td><td>${s.pontos||0}</td></tr>`).join('')||'<tr><td colspan=3 class=muted>Sem apoiadores ainda</td></tr>';
+    const cods=JSON.parse(localStorage.getItem('demo_codigos')||'{}');
+    document.querySelector('#tComp tbody').innerHTML = Object.entries(cods).map(([c,dono])=>`<tr><td>—</td><td>${c}</td><td>—</td><td>${dono}</td><td><span class="tag ok">demo</span></td><td></td></tr>`).join('')||'<tr><td colspan=6 class=muted>Sem comprovantes (modo demo)</td></tr>';
+    return;
+  }
+  signInAnonymously(fb.auth).catch(()=>{});
+  // ranking + contagem de apoiadores
+  onSnapshot(query(collection(fb.db,'apoiadores'), orderBy('pontos','desc'), limit(500)), snap=>{
+    const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
+    document.querySelector('#tRank tbody').innerHTML = rows.map((s,i)=>`<tr><td>${i+1}</td><td>${s.nome||'—'}</td><td>${s.pontos||0}</td></tr>`).join('')||'<tr><td colspan=3 class=muted>Sem apoiadores ainda</td></tr>';
+    window.__apoiadores=rows.length; window.__pinta();
+  });
+  // total
+  onSnapshot(doc(fb.db,'stats','global'), s=>{ window.__total=(s.data()||{}).total||0; window.__pinta(); });
+  // comprovantes
+  onSnapshot(query(collection(fb.db,'comprovantes'), orderBy('criadoEm','desc'), limit(500)), snap=>{
+    const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
+    document.querySelector('#tComp tbody').innerHTML = rows.map(c=>`<tr>
+      <td>${c.imagemUrl?`<img class="thumb" src="${c.imagemUrl}" onclick="abrirImg('${c.imagemUrl}')">`:'—'}</td>
+      <td><code>${c.codigo||c.id}</code></td>
+      <td>${c.eleitor||'—'}</td>
+      <td>${c.apoiadorNome||'—'}</td>
+      <td><span class="tag ok">aprovado</span></td>
+      <td><button class="btn-vermelho" onclick="__rejeitar('${(c.codigo||c.id)}','${c.apoiadorUid}')">Rejeitar</button></td>
+    </tr>`).join('')||'<tr><td colspan=6 class=muted>Nenhum comprovante ainda</td></tr>';
+  });
+}
+window.__total=0; window.__apoiadores=0;
+window.__pinta=()=>pintar(window.__total, window.__apoiadores);
+window.addEventListener('adminok', iniciar);
+</script>
+</body>
+</html>

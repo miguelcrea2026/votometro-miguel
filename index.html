@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#0a6ebd" />
+<title>Votômetro do Miguel 💧 | CREA-RJ Saneamento</title>
+<style>
+  :root{
+    --azul:#0a6ebd; --azul-esc:#074f8a; --azul-claro:#37b6f0;
+    --verde:#20c997; --verde-esc:#0f9e79;
+    --amarelo:#ffd23f; --areia:#f2f7fb; --tinta:#0c2233;
+    --sombra:0 10px 30px rgba(7,79,138,.18);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;
+    color:var(--tinta);
+    background:linear-gradient(180deg,#0a6ebd 0%,#37b6f0 45%,#8fd8f7 100%);
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  .bolhas{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}
+  .bolha{position:absolute;bottom:-60px;border-radius:50%;
+    background:rgba(255,255,255,.18);animation:sobe linear infinite}
+  @keyframes sobe{to{transform:translateY(-115vh)}}
+  .wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:16px}
+  .card{background:#fff;border-radius:22px;box-shadow:var(--sombra);padding:22px;margin-bottom:16px}
+  h1,h2,h3{margin:0 0 10px}
+  .logo{display:flex;align-items:center;gap:10px;justify-content:center;color:#fff;margin:8px 0 14px}
+  .logo .gota{font-size:34px}
+  .logo b{font-size:22px;letter-spacing:.3px}
+  .logo small{display:block;font-size:12px;opacity:.9;font-weight:400}
+  button{font-family:inherit;cursor:pointer;border:0;border-radius:14px;font-weight:700;
+    padding:14px 18px;font-size:16px;transition:transform .08s ease, box-shadow .2s;color:#fff}
+  button:active{transform:scale(.97)}
+  .btn-azul{background:linear-gradient(135deg,var(--azul),var(--azul-claro));box-shadow:0 6px 16px rgba(10,110,189,.35)}
+  .btn-verde{background:linear-gradient(135deg,var(--verde),var(--verde-esc));box-shadow:0 6px 16px rgba(32,201,151,.35)}
+  .btn-ghost{background:#eef5fb;color:var(--azul-esc)}
+  .full{width:100%}
+  input,select{width:100%;padding:13px;border:2px solid #e2edf6;border-radius:12px;font-size:16px;font-family:inherit;margin-top:6px}
+  input:focus,select:focus{outline:none;border-color:var(--azul-claro)}
+  label{font-weight:600;font-size:14px;color:var(--azul-esc)}
+  .hidden{display:none!important}
+  .center{text-align:center}
+  .muted{color:#5b7180;font-size:13px}
+  .meta-num{font-size:44px;font-weight:800;color:var(--azul-esc);line-height:1}
+  .meta-label{font-size:13px;color:#5b7180;margin-top:4px}
+  .tanque{height:26px;background:#e6f2fb;border-radius:20px;overflow:hidden;margin:14px 0 6px;position:relative;border:2px solid #d4e8f7}
+  .agua{height:100%;width:0;background:linear-gradient(90deg,var(--azul),var(--verde));border-radius:20px;
+    transition:width 1s cubic-bezier(.2,.8,.2,1);position:relative}
+  .agua::after{content:"";position:absolute;inset:0;background:
+    repeating-linear-gradient(45deg,rgba(255,255,255,.18) 0 12px,transparent 12px 24px);
+    animation:flui 1s linear infinite}
+  @keyframes flui{to{background-position:24px 0}}
+  .avatar-box{display:flex;justify-content:center;margin:6px 0}
+  .avatar-box svg{width:150px;height:150px;filter:drop-shadow(0 8px 12px rgba(7,79,138,.25))}
+  .opcoes{display:grid;grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:8px;margin:8px 0}
+  .op{border:2px solid #e2edf6;border-radius:12px;padding:8px;text-align:center;font-size:22px;background:#fff;cursor:pointer;transition:.15s}
+  .op.sel{border-color:var(--azul);background:#eaf6ff;transform:scale(1.04)}
+  .cores{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+  .cor{width:34px;height:34px;border-radius:50%;cursor:pointer;border:3px solid #fff;box-shadow:0 0 0 2px #e2edf6}
+  .cor.sel{box-shadow:0 0 0 3px var(--azul)}
+  .rk{display:flex;align-items:center;gap:12px;padding:10px 8px;border-radius:14px;margin-bottom:8px;background:#f7fbfe}
+  .rk .pos{font-weight:800;width:30px;text-align:center;color:var(--azul-esc);font-size:18px}
+  .rk .mini{width:44px;height:44px;flex:0 0 44px}
+  .rk .nome{flex:1;font-weight:700;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .rk .pts{font-weight:800;color:var(--verde-esc);font-size:16px}
+  .rk.eu{background:linear-gradient(135deg,#fff7d6,#fff);border:2px solid var(--amarelo)}
+  .rk.top1{background:linear-gradient(135deg,#fff2c2,#fff)}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);
+    background:var(--tinta);color:#fff;padding:14px 20px;border-radius:14px;z-index:50;
+    box-shadow:var(--sombra);transition:transform .35s;max-width:90%;text-align:center;font-weight:600}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+  .badge{display:inline-block;background:#eaf6ff;color:var(--azul-esc);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700}
+  .foto-preview{width:100%;max-height:260px;object-fit:contain;border-radius:14px;margin-top:10px;background:#f2f7fb;display:none}
+  .spin{display:inline-block;width:16px;height:16px;border:3px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:g 1s linear infinite;vertical-align:-3px}
+  @keyframes g{to{transform:rotate(360deg)}}
+  .abas{display:flex;gap:8px;margin-bottom:14px}
+  .aba{flex:1;text-align:center;padding:10px;border-radius:14px;background:rgba(255,255,255,.25);color:#fff;font-weight:700;cursor:pointer}
+  .aba.at{background:#fff;color:var(--azul-esc)}
+  .pill{font-size:12px;background:#eaf6ff;color:var(--azul-esc);padding:3px 10px;border-radius:20px;font-weight:700}
+  .rodape{text-align:center;color:#eaf6ff;font-size:12px;padding:14px 0 30px}
+</style>
+</head>
+<body>
+<div class="bolhas" id="bolhas"></div>
+
+<div class="wrap">
+
+  <div class="logo">
+    <span class="gota">💧</span>
+    <b>Votômetro do Miguel<small>CREA-RJ • Água e Saneamento pra todos</small></b>
+  </div>
+
+  <!-- ===== TELA 1: SENHA DE ACESSO ===== -->
+  <div id="telaSenha" class="card center">
+    <h2>🔒 Acesso da campanha</h2>
+    <p class="muted">Digite a senha que você recebeu junto com o QR code.</p>
+    <input id="inSenha" type="password" placeholder="Senha da campanha" autocomplete="off" />
+    <p id="erroSenha" class="muted" style="color:#d64545;height:16px"></p>
+    <button class="btn-azul full" onclick="checarSenha()">Entrar 🚀</button>
+  </div>
+
+  <!-- ===== TELA 2: CADASTRO + AVATAR ===== -->
+  <div id="telaCadastro" class="card hidden">
+    <h2>Bora criar seu personagem! 🎨</h2>
+    <p class="muted">Monte a sua Gotinha do Saneamento e entre na disputa.</p>
+
+    <div class="avatar-box"><div id="avatarPreview"></div></div>
+
+    <label>Cor da água</label>
+    <div class="cores" id="cores"></div>
+
+    <label>Capacete / chapéu</label>
+    <div class="opcoes" id="chapeus"></div>
+
+    <label>Expressão</label>
+    <div class="opcoes" id="expressoes"></div>
+
+    <label>Acessório</label>
+    <div class="opcoes" id="acessorios"></div>
+
+    <label style="margin-top:12px;display:block">Seu nome ou apelido</label>
+    <input id="inNome" maxlength="24" placeholder="Ex: Ana da Baixada" />
+
+    <button class="btn-verde full" style="margin-top:16px" onclick="salvarCadastro()">Confirmar e começar 💪</button>
+  </div>
+
+  <!-- ===== TELA 3: APP PRINCIPAL ===== -->
+  <div id="telaApp" class="hidden">
+
+    <div class="card center">
+      <div class="badge">🎯 Meta da campanha</div>
+      <div class="tanque"><div class="agua" id="agua"></div></div>
+      <div><span class="meta-num" id="totalVotos">0</span> <span class="muted">/ 10.000 votos</span></div>
+      <div class="meta-label" id="faltam">Vamos encher o tanque! 💦</div>
+    </div>
+
+    <div class="abas">
+      <div class="aba at" id="abaEnviar" onclick="troca('enviar')">📸 Enviar comprovante</div>
+      <div class="aba" id="abaRank" onclick="troca('rank')">🏆 Ranking</div>
+    </div>
+
+    <div id="viewEnviar" class="card">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+        <div id="meuAvatar" style="width:52px;height:52px;flex:0 0 52px"></div>
+        <div>
+          <div style="font-weight:800" id="meuNome">—</div>
+          <div class="pill"><span id="meusPontos">0</span> ponto(s)</div>
+        </div>
+      </div>
+      <p class="muted">Cada comprovante de votação <b>diferente</b> vale 1 ponto. O primeiro a enviar aquele comprovante leva o ponto! 🥇</p>
+
+      <label>Foto do comprovante</label>
+      <input id="inFoto" type="file" accept="image/*" capture="environment" onchange="lerFoto(event)" />
+      <img id="preview" class="foto-preview" alt="prévia" />
+      <div id="ocrStatus" class="muted" style="height:18px;margin-top:6px"></div>
+
+      <label style="margin-top:10px;display:block">Código do comprovante</label>
+      <input id="inCodigo" placeholder="Detectado da foto (confira/ajuste)" />
+
+      <label style="margin-top:10px;display:block">Nome do eleitor no comprovante</label>
+      <input id="inEleitor" placeholder="Detectado da foto (confira/ajuste)" />
+
+      <button class="btn-verde full" style="margin-top:16px" id="btnEnviar" onclick="enviarComprovante()">Marcar ponto ✅</button>
+    </div>
+
+    <div id="viewRank" class="card hidden">
+      <h3>🏆 Ranking ao vivo</h3>
+      <p class="muted">Atualiza em tempo real conforme os comprovantes chegam.</p>
+      <div id="listaRank"></div>
+    </div>
+
+  </div>
+
+  <div class="rodape">Feito com 💧 para a campanha do Miguel • CREA-RJ</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ================= CONFIG ================= -->
+<script>
+  /* ⚙️ 1) SENHA — troque aqui */
+  const SENHA_ACESSO = "saneamento2026";   // senha que os apoiadores usam
+
+  /* ⚙️ 2) FIREBASE — cole a config do seu projeto (veja CONFIGURACAO.md).
+     Enquanto os campos estiverem "COLE_AQUI", o site roda em MODO DEMO
+     (dados só no aparelho), ótimo para testar o visual. */
+  const FIREBASE_CONFIG = {
+    apiKey: "COLE_AQUI",
+    authDomain: "COLE_AQUI",
+    projectId: "COLE_AQUI",
+    storageBucket: "COLE_AQUI",
+    messagingSenderId: "COLE_AQUI",
+    appId: "COLE_AQUI"
+  };
+
+  const META = 10000;
+</script>
+
+<!-- ================= AVATAR ================= -->
+<script>
+  const CORES = ["#37b6f0","#0a6ebd","#20c997","#ffd23f","#ff7a59","#a06bff","#ff6fae","#00c2c7"];
+  const CHAPEUS = {nenhum:"🚫",capacete:"⛑️",bone:"🧢",coroa:"👑"};
+  const EXPRESSOES = {feliz:"😀",joia:"😎",apaixonada:"😍",determinada:"😤"};
+  const ACESSORIOS = {nenhum:"✖️",cano:"🔧",folha:"🌱",gota:"💧"};
+
+  let avatar = {cor:"#37b6f0", chapeu:"capacete", exp:"feliz", ac:"cano"};
+
+  function avatarSVG(a, size){
+    a = a || {cor:'#37b6f0',chapeu:'nenhum',exp:'feliz',ac:'nenhum'};
+    size = size||150;
+    const olhos = {
+      feliz:'<circle cx="80" cy="120" r="7"/><circle cx="120" cy="120" r="7"/><path d="M82 140 Q100 155 118 140" stroke="#0c2233" stroke-width="5" fill="none" stroke-linecap="round"/>',
+      joia:'<rect x="66" y="112" width="30" height="14" rx="7" fill="#0c2233"/><rect x="104" y="112" width="30" height="14" rx="7" fill="#0c2233"/><rect x="96" y="117" width="8" height="4" fill="#0c2233"/><path d="M84 143 Q100 152 116 143" stroke="#0c2233" stroke-width="5" fill="none" stroke-linecap="round"/>',
+      apaixonada:'<path d="M80 116 l6 6 6-6 a4 4 0 0 0-6-2 a4 4 0 0 0-6 2z" fill="#d64545"/><path d="M114 116 l6 6 6-6 a4 4 0 0 0-6-2 a4 4 0 0 0-6 2z" fill="#d64545"/><path d="M82 140 Q100 156 118 140" stroke="#0c2233" stroke-width="5" fill="none" stroke-linecap="round"/>',
+      determinada:'<path d="M72 116 L92 122" stroke="#0c2233" stroke-width="5" stroke-linecap="round"/><path d="M128 116 L108 122" stroke="#0c2233" stroke-width="5" stroke-linecap="round"/><circle cx="82" cy="126" r="6"/><circle cx="118" cy="126" r="6"/><path d="M84 145 L116 145" stroke="#0c2233" stroke-width="5" stroke-linecap="round"/>'
+    }[a.exp] || '';
+    const chapeu = {
+      nenhum:'',
+      capacete:'<path d="M55 78 Q100 30 145 78 Z" fill="#ffb703"/><rect x="50" y="74" width="100" height="12" rx="6" fill="#fb8500"/><rect x="94" y="40" width="12" height="34" fill="#fb8500"/>',
+      bone:'<path d="M58 80 Q100 34 142 80 Z" fill="#e63946"/><path d="M138 80 Q170 82 168 92 L138 90 Z" fill="#c1121f"/>',
+      coroa:'<path d="M62 72 L74 46 L88 66 L100 40 L112 66 L126 46 L138 72 Z" fill="#ffd23f" stroke="#f4a300" stroke-width="3"/>'
+    }[a.chapeu] || '';
+    const ac = {
+      nenhum:'',
+      cano:'<g transform="translate(120,150) rotate(20)"><rect x="0" y="0" width="46" height="16" rx="4" fill="#9aa7b2"/><rect x="-6" y="-4" width="12" height="24" rx="3" fill="#6c7a89"/><rect x="40" y="-4" width="12" height="24" rx="3" fill="#6c7a89"/></g>',
+      folha:'<path d="M132 96 Q166 78 160 120 Q126 126 132 96 Z" fill="#20c997"/><path d="M138 112 Q150 100 156 96" stroke="#0f9e79" stroke-width="3" fill="none"/>',
+      gota:'<path d="M150 92 C150 92 138 108 138 118 a12 12 0 0 0 24 0 C162 108 150 92 150 92 Z" fill="#37b6f0" stroke="#0a6ebd" stroke-width="2"/>'
+    }[a.ac] || '';
+    return `<svg viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
+      <defs><radialGradient id="g${size}" cx="40%" cy="30%"><stop offset="0%" stop-color="#ffffff" stop-opacity=".65"/><stop offset="55%" stop-color="${a.cor}"/><stop offset="100%" stop-color="${a.cor}"/></radialGradient></defs>
+      <path d="M100 30 C100 30 45 105 45 140 a55 55 0 0 0 110 0 C155 105 100 30 100 30 Z" fill="url(#g${size})" stroke="rgba(0,0,0,.08)" stroke-width="2"/>
+      <ellipse cx="78" cy="95" rx="14" ry="10" fill="#fff" opacity=".45"/>
+      <g fill="#0c2233">${olhos}</g>
+      ${ac}
+      ${chapeu}
+    </svg>`;
+  }
+
+  function renderAvatar(){
+    document.getElementById('avatarPreview').innerHTML = avatarSVG(avatar,150);
+  }
+  function montarOpcoes(){
+    const c = document.getElementById('cores');
+    c.innerHTML = CORES.map(cor=>`<div class="cor ${cor===avatar.cor?'sel':''}" style="background:${cor}" onclick="setAv('cor','${cor}')"></div>`).join('');
+    const mk=(obj,key)=>Object.entries(obj).map(([k,v])=>`<div class="op ${avatar[key]===k?'sel':''}" onclick="setAv('${key}','${k}')">${v}</div>`).join('');
+    document.getElementById('chapeus').innerHTML=mk(CHAPEUS,'chapeu');
+    document.getElementById('expressoes').innerHTML=mk(EXPRESSOES,'exp');
+    document.getElementById('acessorios').innerHTML=mk(ACESSORIOS,'ac');
+  }
+  function setAv(key,val){ avatar[key]=val; renderAvatar(); montarOpcoes(); }
+</script>
+
+<!-- ================= TESSERACT (OCR) ================= -->
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+<!-- ================= APP (módulo) ================= -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, runTransaction, collection, query, orderBy, limit, onSnapshot, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage, ref as sref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+const DEMO = FIREBASE_CONFIG.apiKey === "COLE_AQUI";
+let uid=null, eu=null;
+
+let fb=null;
+if(!DEMO){
+  const app=initializeApp(FIREBASE_CONFIG);
+  fb={auth:getAuth(app), db:getFirestore(app), st:getStorage(app)};
+}
+
+const DB = {
+  async login(){
+    if(DEMO){ uid = localStorage.getItem('demo_uid') || ('demo_'+Math.random().toString(36).slice(2)); localStorage.setItem('demo_uid',uid); return uid; }
+    const cred = await signInAnonymously(fb.auth); uid = cred.user.uid; return uid;
+  },
+  async getEu(){
+    if(DEMO){ return JSON.parse(localStorage.getItem('demo_sup_'+uid)||'null'); }
+    const s = await getDoc(doc(fb.db,'apoiadores',uid)); return s.exists()?s.data():null;
+  },
+  async salvarEu(data){
+    if(DEMO){ localStorage.setItem('demo_sup_'+uid, JSON.stringify(data)); demoBroadcast(); return; }
+    await setDoc(doc(fb.db,'apoiadores',uid), data, {merge:true});
+  },
+  async enviar({codigo, eleitor, blob}){
+    const chave = codigo.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+    if(!chave) return {status:'semcodigo'};
+    if(DEMO){
+      const codigos = JSON.parse(localStorage.getItem('demo_codigos')||'{}');
+      if(codigos[chave]) return {status:'duplicado', dono:codigos[chave]};
+      codigos[chave]=eu.nome; localStorage.setItem('demo_codigos',JSON.stringify(codigos));
+      eu.pontos=(eu.pontos||0)+1; await this.salvarEu(eu);
+      const stats=JSON.parse(localStorage.getItem('demo_stats')||'{"total":0}'); stats.total++; localStorage.setItem('demo_stats',JSON.stringify(stats));
+      demoBroadcast(); return {status:'ok'};
+    }
+    let imagemUrl='';
+    try{ const r=sref(fb.st,'comprovantes/'+chave+'.jpg'); await uploadBytes(r,blob); imagemUrl=await getDownloadURL(r);}catch(e){}
+    try{
+      await runTransaction(fb.db, async (tx)=>{
+        const cref=doc(fb.db,'comprovantes',chave);
+        const cs=await tx.get(cref);
+        if(cs.exists()) throw {dup:true, dono:cs.data().apoiadorNome};
+        tx.set(cref,{codigo:chave, eleitor, apoiadorUid:uid, apoiadorNome:eu.nome, imagemUrl, status:'aprovado', criadoEm:serverTimestamp()});
+        tx.set(doc(fb.db,'apoiadores',uid),{pontos:increment(1)},{merge:true});
+        tx.set(doc(fb.db,'stats','global'),{total:increment(1)},{merge:true});
+      });
+      return {status:'ok'};
+    }catch(e){ if(e&&e.dup) return {status:'duplicado', dono:e.dono}; throw e; }
+  },
+  ouvirRanking(cb){
+    if(DEMO){ demoRankCb=cb; demoBroadcast(); return; }
+    const q=query(collection(fb.db,'apoiadores'), orderBy('pontos','desc'), limit(50));
+    onSnapshot(q, snap=>{ cb(snap.docs.map(d=>({id:d.id,...d.data()}))); });
+  },
+  ouvirTotal(cb){
+    if(DEMO){ demoTotalCb=cb; demoBroadcast(); return; }
+    onSnapshot(doc(fb.db,'stats','global'), s=> cb((s.data()||{}).total||0));
+  }
+};
+
+let demoRankCb=null, demoTotalCb=null;
+function demoBroadcast(){
+  if(demoRankCb){
+    const lista=[]; for(let k in localStorage){ if(k.startsWith('demo_sup_')){ const d=JSON.parse(localStorage[k]); if(d) lista.push({id:k,...d}); } }
+    lista.sort((a,b)=>(b.pontos||0)-(a.pontos||0)); demoRankCb(lista.slice(0,50));
+  }
+  if(demoTotalCb){ const s=JSON.parse(localStorage.getItem('demo_stats')||'{"total":0}'); demoTotalCb(s.total||0); }
+}
+window.addEventListener('storage', demoBroadcast);
+
+window.__DB = DB;
+window.__setUid = v=>uid=v;
+window.__setEu = v=>eu=v;
+window.__getEu = ()=>eu;
+window.__DEMO = DEMO;
+window.dispatchEvent(new Event('dbpronto'));
+</script>
+
+<!-- ================= UI / FLUXO ================= -->
+<script>
+  (function(){const b=document.getElementById('bolhas');for(let i=0;i<14;i++){const d=document.createElement('div');d.className='bolha';const s=8+Math.random()*30;d.style.width=d.style.height=s+'px';d.style.left=Math.random()*100+'%';d.style.animationDuration=(6+Math.random()*10)+'s';d.style.animationDelay=(-Math.random()*10)+'s';b.appendChild(d);} })();
+
+  function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3200);}
+
+  window.addEventListener('dbpronto', ()=>{ iniciar(); });
+
+  function checarSenha(){
+    const v=document.getElementById('inSenha').value;
+    if(v===SENHA_ACESSO){ sessionStorage.setItem('acesso','1'); document.getElementById('telaSenha').classList.add('hidden'); rotaPosLogin(); }
+    else{ document.getElementById('erroSenha').textContent='Senha incorreta 🙈'; }
+  }
+  window.checarSenha=checarSenha;
+
+  async function iniciar(){
+    montarOpcoes(); renderAvatar();
+    if(window.__DEMO){ document.querySelector('.rodape').innerHTML='⚠️ MODO DEMO (dados só neste aparelho) — configure o Firebase para o ranking real. • CREA-RJ'; }
+    if(sessionStorage.getItem('acesso')==='1'){ document.getElementById('telaSenha').classList.add('hidden'); rotaPosLogin(); }
+  }
+
+  async function rotaPosLogin(){
+    const uid = await window.__DB.login(); window.__setUid(uid);
+    const eu = await window.__DB.getEu();
+    if(eu){ window.__setEu(eu); abrirApp(); }
+    else { document.getElementById('telaCadastro').classList.remove('hidden'); }
+  }
+
+  async function salvarCadastro(){
+    const nome=document.getElementById('inNome').value.trim();
+    if(nome.length<2){ toast('Escreva seu nome 🙂'); return; }
+    const eu={nome, avatar, pontos:0, criadoEm:Date.now()};
+    window.__setEu(eu); await window.__DB.salvarEu(eu);
+    document.getElementById('telaCadastro').classList.add('hidden');
+    abrirApp();
+  }
+  window.salvarCadastro=salvarCadastro;
+
+  function abrirApp(){
+    const eu=window.__getEu();
+    document.getElementById('telaApp').classList.remove('hidden');
+    document.getElementById('meuNome').textContent=eu.nome;
+    document.getElementById('meuAvatar').innerHTML=avatarSVG(eu.avatar,52);
+    document.getElementById('meusPontos').textContent=eu.pontos||0;
+    window.__DB.ouvirTotal(t=>{
+      document.getElementById('totalVotos').textContent=t.toLocaleString('pt-BR');
+      const pct=Math.min(100,(t/META)*100);
+      document.getElementById('agua').style.width=pct+'%';
+      const falta=Math.max(0,META-t);
+      document.getElementById('faltam').textContent = falta>0? `Faltam ${falta.toLocaleString('pt-BR')} votos pra meta! 💦` : '🎉 META BATIDA! Obrigado!';
+    });
+    window.__DB.ouvirRanking(lista=>{
+      const meuNome=window.__getEu().nome;
+      const el=document.getElementById('listaRank');
+      const medal=p=>p===1?'🥇':p===2?'🥈':p===3?'🥉':'';
+      el.innerHTML = lista.map((s,i)=>{
+        const pos=i+1; const euFlag=s.nome===meuNome;
+        return `<div class="rk ${pos===1?'top1':''} ${euFlag?'eu':''}">
+          <div class="pos">${medal(pos)||pos}</div>
+          <div class="mini">${avatarSVG(s.avatar,44)}</div>
+          <div class="nome">${s.nome}${euFlag?' <span class="pill">você</span>':''}</div>
+          <div class="pts">${s.pontos||0}</div>
+        </div>`;
+      }).join('') || '<p class="muted center">Seja o primeiro a marcar ponto! 🥇</p>';
+      const meu=lista.find(s=>s.nome===meuNome); if(meu){ document.getElementById('meusPontos').textContent=meu.pontos||0; const e=window.__getEu(); e.pontos=meu.pontos; }
+    });
+  }
+
+  function troca(qual){
+    document.getElementById('abaEnviar').classList.toggle('at',qual==='enviar');
+    document.getElementById('abaRank').classList.toggle('at',qual==='rank');
+    document.getElementById('viewEnviar').classList.toggle('hidden',qual!=='enviar');
+    document.getElementById('viewRank').classList.toggle('hidden',qual!=='rank');
+  }
+  window.troca=troca;
+
+  let fotoBlob=null;
+  async function lerFoto(ev){
+    const f=ev.target.files[0]; if(!f) return;
+    fotoBlob=f;
+    const url=URL.createObjectURL(f);
+    const img=document.getElementById('preview'); img.src=url; img.style.display='block';
+    const st=document.getElementById('ocrStatus'); st.innerHTML='🔎 Lendo o comprovante... <span class="spin"></span>';
+    try{
+      const {data}=await Tesseract.recognize(f,'por');
+      const texto=(data.text||'');
+      const mCod = texto.match(/\b[0-9]{5,}\b/) || texto.match(/\b[A-Z0-9]{6,}\b/i);
+      if(mCod && !document.getElementById('inCodigo').value) document.getElementById('inCodigo').value=mCod[0];
+      let nome='';
+      const lm=texto.match(/nome[:\s]+([A-ZÀ-Ú][A-ZÀ-Ú\s]{4,})/i);
+      if(lm) nome=lm[1].trim();
+      if(!nome){ const linhas=texto.split('\n').map(s=>s.trim()).filter(s=>/^[A-ZÀ-Ú][A-ZÀ-Ú\s]{6,}$/.test(s)); if(linhas[0]) nome=linhas[0]; }
+      if(nome && !document.getElementById('inEleitor').value) document.getElementById('inEleitor').value=nome.replace(/\s+/g,' ');
+      st.textContent = mCod ? '✅ Li o comprovante — confira os campos abaixo.' : '⚠️ Não achei o código automaticamente, digite abaixo.';
+    }catch(e){ st.textContent='⚠️ Não consegui ler — preencha os campos manualmente.'; }
+  }
+  window.lerFoto=lerFoto;
+
+  async function enviarComprovante(){
+    const codigo=document.getElementById('inCodigo').value.trim();
+    const eleitor=document.getElementById('inEleitor').value.trim();
+    if(!fotoBlob){ toast('Anexe a foto do comprovante 📸'); return; }
+    if(!codigo){ toast('Informe o código do comprovante'); return; }
+    const btn=document.getElementById('btnEnviar'); btn.disabled=true; const orig=btn.innerHTML; btn.innerHTML='Enviando... <span class="spin"></span>';
+    try{
+      const r=await window.__DB.enviar({codigo,eleitor,blob:fotoBlob});
+      if(r.status==='ok'){ toast('🎉 +1 ponto! Mandou bem!'); confete(); limparForm(); troca('rank'); }
+      else if(r.status==='duplicado'){ toast('😅 Esse comprovante já foi enviado'+(r.dono?(' por '+r.dono):'')+'.'); }
+      else if(r.status==='semcodigo'){ toast('Código inválido, confira.'); }
+    }catch(e){ toast('Erro ao enviar. Tente de novo.'); console.error(e); }
+    btn.disabled=false; btn.innerHTML=orig;
+  }
+  window.enviarComprovante=enviarComprovante;
+
+  function limparForm(){ fotoBlob=null; document.getElementById('inFoto').value=''; document.getElementById('inCodigo').value=''; document.getElementById('inEleitor').value=''; document.getElementById('preview').style.display='none'; document.getElementById('ocrStatus').textContent=''; }
+
+  function confete(){ for(let i=0;i<40;i++){ const c=document.createElement('div'); c.textContent=['💧','⭐','✅','🎉','🥇'][Math.floor(Math.random()*5)]; c.style.cssText=`position:fixed;left:${Math.random()*100}%;top:-20px;font-size:${14+Math.random()*18}px;z-index:60;pointer-events:none;transition:transform 2.2s ease-in,opacity 2.2s`; document.body.appendChild(c); requestAnimationFrame(()=>{ c.style.transform=`translateY(${window.innerHeight+40}px) rotate(${Math.random()*720}deg)`; c.style.opacity='0'; }); setTimeout(()=>c.remove(),2300);} }
+</script>
+</body>
+</html>
