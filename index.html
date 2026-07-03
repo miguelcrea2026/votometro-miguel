@@ -6,88 +6,88 @@
 <meta name="theme-color" content="#0a6ebd" />
 <title>Vote no Miguel 🗳️ | CREA-RJ</title>
 <style>
-  :root{
-    --azul:#0a6ebd; --azul-esc:#074f8a; --azul-claro:#37b6f0;
-    --verde:#20c997; --verde-esc:#0f9e79;
-    --amarelo:#ffd23f; --areia:#f2f7fb; --tinta:#0c2233;
-    --sombra:0 10px 30px rgba(7,79,138,.18);
-  }
-  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{margin:0;padding:0}
-  body{
-    font-family:'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;
-    color:var(--tinta);
-    background:linear-gradient(180deg,#0a6ebd 0%,#37b6f0 45%,#8fd8f7 100%);
-    min-height:100vh;
-    overflow-x:hidden;
-  }
-  .bolhas{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}
-  .bolha{position:absolute;bottom:-60px;border-radius:50%;
-    background:rgba(255,255,255,.14);animation:sobe linear infinite}
-  @keyframes sobe{to{transform:translateY(-115vh)}}
-  .wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:16px}
-  .card{background:#fff;border-radius:22px;box-shadow:var(--sombra);padding:22px;margin-bottom:16px}
-  h1,h2,h3{margin:0 0 10px}
-  .logo{display:flex;align-items:center;gap:10px;justify-content:center;color:#fff;margin:8px 0 14px}
-  .logo .mark{width:46px;height:46px;flex:0 0 46px}
-  .logo b{font-size:22px;letter-spacing:.3px}
-  .logo small{display:block;font-size:12px;opacity:.9;font-weight:400}
-  button{font-family:inherit;cursor:pointer;border:0;border-radius:14px;font-weight:700;
-    padding:14px 18px;font-size:16px;transition:transform .08s ease, box-shadow .2s;color:#fff}
-  button:active{transform:scale(.97)}
-  .btn-azul{background:linear-gradient(135deg,var(--azul),var(--azul-claro));box-shadow:0 6px 16px rgba(10,110,189,.35)}
-  .btn-verde{background:linear-gradient(135deg,var(--verde),var(--verde-esc));box-shadow:0 6px 16px rgba(32,201,151,.35)}
-  .btn-ghost{background:#eef5fb;color:var(--azul-esc)}
-  .full{width:100%}
-  input,select{width:100%;padding:13px;border:2px solid #e2edf6;border-radius:12px;font-size:16px;font-family:inherit;margin-top:6px}
-  input:focus,select:focus{outline:none;border-color:var(--azul-claro)}
-  label{font-weight:600;font-size:14px;color:var(--azul-esc)}
-  .hidden{display:none!important}
-  .center{text-align:center}
-  .muted{color:#5b7180;font-size:13px}
-  .meta-num{font-size:44px;font-weight:800;color:var(--azul-esc);line-height:1}
-  .meta-label{font-size:13px;color:#5b7180;margin-top:4px}
-  .oficial{background:linear-gradient(135deg,#074f8a,#0a6ebd);color:#fff}
-  .oficial .badge{background:rgba(255,255,255,.22);color:#fff}
-  .part-linha{display:flex;align-items:center;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:10px}
-  .part-nums{font-size:14px;line-height:1.7}
-  .part-nums b{font-size:16px}
-  .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
-  .tanque{height:26px;background:#e6f2fb;border-radius:20px;overflow:hidden;margin:14px 0 6px;position:relative;border:2px solid #d4e8f7}
-  .agua{height:100%;width:0;background:linear-gradient(90deg,var(--azul),var(--verde));border-radius:20px;
-    transition:width 1s cubic-bezier(.2,.8,.2,1);position:relative}
-  .agua::after{content:"";position:absolute;inset:0;background:
-    repeating-linear-gradient(45deg,rgba(255,255,255,.18) 0 12px,transparent 12px 24px);
-    animation:flui 1s linear infinite}
-  @keyframes flui{to{background-position:24px 0}}
-  .avatar-box{display:flex;justify-content:center;margin:6px 0}
-  .avatar-box svg{width:160px;height:160px;filter:drop-shadow(0 8px 12px rgba(7,79,138,.22))}
-  .opcoes{display:grid;grid-template-columns:repeat(auto-fit,minmax(64px,1fr));gap:8px;margin:8px 0}
-  .op{border:2px solid #e2edf6;border-radius:12px;padding:8px;text-align:center;font-size:22px;background:#fff;cursor:pointer;transition:.15s}
-  .op.sel{border-color:var(--azul);background:#eaf6ff;transform:scale(1.04)}
-  .cores{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
-  .cor{width:34px;height:34px;border-radius:50%;cursor:pointer;border:3px solid #fff;box-shadow:0 0 0 2px #e2edf6}
-  .cor.sel{box-shadow:0 0 0 3px var(--azul)}
-  .rk{display:flex;align-items:center;gap:12px;padding:10px 8px;border-radius:14px;margin-bottom:8px;background:#f7fbfe}
-  .rk .pos{font-weight:800;width:30px;text-align:center;color:var(--azul-esc);font-size:18px}
-  .rk .mini{width:46px;height:46px;flex:0 0 46px}
-  .rk .nome{flex:1;font-weight:700;font-size:15px;overflow:hidden}
-  .rk .pts{font-weight:800;color:var(--verde-esc);font-size:16px}
-  .rk.eu{background:linear-gradient(135deg,#fff7d6,#fff);border:2px solid var(--amarelo)}
-  .rk.top1{background:linear-gradient(135deg,#fff2c2,#fff)}
-  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);
-    background:var(--tinta);color:#fff;padding:14px 20px;border-radius:14px;z-index:50;
-    box-shadow:var(--sombra);transition:transform .35s;max-width:90%;text-align:center;font-weight:600}
-  .toast.show{transform:translateX(-50%) translateY(0)}
-  .badge{display:inline-block;background:#eaf6ff;color:var(--azul-esc);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700}
-  .foto-preview{width:100%;max-height:260px;object-fit:contain;border-radius:14px;margin-top:10px;background:#f2f7fb;display:none}
-  .spin{display:inline-block;width:16px;height:16px;border:3px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:g 1s linear infinite;vertical-align:-3px}
-  @keyframes g{to{transform:rotate(360deg)}}
-  .abas{display:flex;gap:8px;margin-bottom:14px}
-  .aba{flex:1;text-align:center;padding:10px 6px;border-radius:14px;background:rgba(255,255,255,.25);color:#fff;font-weight:700;cursor:pointer;font-size:15px}
-  .aba.at{background:#fff;color:var(--azul-esc)}
-  .pill{font-size:12px;background:#eaf6ff;color:var(--azul-esc);padding:3px 10px;border-radius:20px;font-weight:700}
-  .rodape{text-align:center;color:#eaf6ff;font-size:12px;padding:14px 0 30px}
+:root{
+--azul:#0a6ebd; --azul-esc:#074f8a; --azul-claro:#37b6f0;
+--verde:#20c997; --verde-esc:#0f9e79;
+--amarelo:#ffd23f; --areia:#f2f7fb; --tinta:#0c2233;
+--sombra:0 10px 30px rgba(7,79,138,.18);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+font-family:'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;
+color:var(--tinta);
+background:linear-gradient(180deg,#0a6ebd 0%,#37b6f0 45%,#8fd8f7 100%);
+min-height:100vh;
+overflow-x:hidden;
+}
+.bolhas{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}
+.bolha{position:absolute;bottom:-60px;border-radius:50%;
+background:rgba(255,255,255,.14);animation:sobe linear infinite}
+@keyframes sobe{to{transform:translateY(-115vh)}}
+.wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:16px}
+.card{background:#fff;border-radius:22px;box-shadow:var(--sombra);padding:22px;margin-bottom:16px}
+h1,h2,h3{margin:0 0 10px}
+.logo{display:flex;align-items:center;gap:10px;justify-content:center;color:#fff;margin:8px 0 14px}
+.logo .mark{width:46px;height:46px;flex:0 0 46px}
+.logo b{font-size:22px;letter-spacing:.3px}
+.logo small{display:block;font-size:12px;opacity:.9;font-weight:400}
+button{font-family:inherit;cursor:pointer;border:0;border-radius:14px;font-weight:700;
+padding:14px 18px;font-size:16px;transition:transform .08s ease, box-shadow .2s;color:#fff}
+button:active{transform:scale(.97)}
+.btn-azul{background:linear-gradient(135deg,var(--azul),var(--azul-claro));box-shadow:0 6px 16px rgba(10,110,189,.35)}
+.btn-verde{background:linear-gradient(135deg,var(--verde),var(--verde-esc));box-shadow:0 6px 16px rgba(32,201,151,.35)}
+.btn-ghost{background:#eef5fb;color:var(--azul-esc)}
+.full{width:100%}
+input,select{width:100%;padding:13px;border:2px solid #e2edf6;border-radius:12px;font-size:16px;font-family:inherit;margin-top:6px}
+input:focus,select:focus{outline:none;border-color:var(--azul-claro)}
+label{font-weight:600;font-size:14px;color:var(--azul-esc)}
+.hidden{display:none!important}
+.center{text-align:center}
+.muted{color:#5b7180;font-size:13px}
+.meta-num{font-size:44px;font-weight:800;color:var(--azul-esc);line-height:1}
+.meta-label{font-size:13px;color:#5b7180;margin-top:4px}
+.oficial{background:linear-gradient(135deg,#074f8a,#0a6ebd);color:#fff}
+.oficial .badge{background:rgba(255,255,255,.22);color:#fff}
+.part-linha{display:flex;align-items:center;gap:18px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.part-nums{font-size:14px;line-height:1.7}
+.part-nums b{font-size:16px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.tanque{height:26px;background:#e6f2fb;border-radius:20px;overflow:hidden;margin:14px 0 6px;position:relative;border:2px solid #d4e8f7}
+.agua{height:100%;width:0;background:linear-gradient(90deg,var(--azul),var(--verde));border-radius:20px;
+transition:width 1s cubic-bezier(.2,.8,.2,1);position:relative}
+.agua::after{content:"";position:absolute;inset:0;background:
+repeating-linear-gradient(45deg,rgba(255,255,255,.18) 0 12px,transparent 12px 24px);
+animation:flui 1s linear infinite}
+@keyframes flui{to{background-position:24px 0}}
+.avatar-box{display:flex;justify-content:center;margin:6px 0}
+.avatar-box svg{width:160px;height:160px;filter:drop-shadow(0 8px 12px rgba(7,79,138,.22))}
+.opcoes{display:grid;grid-template-columns:repeat(auto-fit,minmax(64px,1fr));gap:8px;margin:8px 0}
+.op{border:2px solid #e2edf6;border-radius:12px;padding:8px;text-align:center;font-size:22px;background:#fff;cursor:pointer;transition:.15s}
+.op.sel{border-color:var(--azul);background:#eaf6ff;transform:scale(1.04)}
+.cores{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.cor{width:34px;height:34px;border-radius:50%;cursor:pointer;border:3px solid #fff;box-shadow:0 0 0 2px #e2edf6}
+.cor.sel{box-shadow:0 0 0 3px var(--azul)}
+.rk{display:flex;align-items:center;gap:12px;padding:10px 8px;border-radius:14px;margin-bottom:8px;background:#f7fbfe}
+.rk .pos{font-weight:800;width:30px;text-align:center;color:var(--azul-esc);font-size:18px}
+.rk .mini{width:46px;height:46px;flex:0 0 46px}
+.rk .nome{flex:1;font-weight:700;font-size:15px;overflow:hidden}
+.rk .pts{font-weight:800;color:var(--verde-esc);font-size:16px}
+.rk.eu{background:linear-gradient(135deg,#fff7d6,#fff);border:2px solid var(--amarelo)}
+.rk.top1{background:linear-gradient(135deg,#fff2c2,#fff)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);
+background:var(--tinta);color:#fff;padding:14px 20px;border-radius:14px;z-index:50;
+box-shadow:var(--sombra);transition:transform .35s;max-width:90%;text-align:center;font-weight:600}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.badge{display:inline-block;background:#eaf6ff;color:var(--azul-esc);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700}
+.foto-preview{width:100%;max-height:260px;object-fit:contain;border-radius:14px;margin-top:10px;background:#f2f7fb;display:none}
+.spin{display:inline-block;width:16px;height:16px;border:3px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:g 1s linear infinite;vertical-align:-3px}
+@keyframes g{to{transform:rotate(360deg)}}
+.abas{display:flex;gap:8px;margin-bottom:14px}
+.aba{flex:1;text-align:center;padding:10px 6px;border-radius:14px;background:rgba(255,255,255,.25);color:#fff;font-weight:700;cursor:pointer;font-size:15px}
+.aba.at{background:#fff;color:var(--azul-esc)}
+.pill{font-size:12px;background:#eaf6ff;color:var(--azul-esc);padding:3px 10px;border-radius:20px;font-weight:700}
+.rodape{text-align:center;color:#eaf6ff;font-size:12px;padding:14px 0 30px}
 </style>
 </head>
 <body>
@@ -95,213 +95,213 @@
 
 <div class="wrap">
 
-  <div class="logo">
-    <span class="mark" id="logoAvatar"></span>
-    <b>Vote no Miguel<small>Cada voto conta • CREA-RJ</small></b>
-  </div>
+<div class="logo">
+<span class="mark" id="logoAvatar"></span>
+<b>Vote no Miguel<small>Cada voto conta • CREA-RJ</small></b>
+</div>
 
-  <!-- ===== TELA 1: SENHA ===== -->
-  <div id="telaSenha" class="card center">
-    <h2>🔒 Acesso da campanha</h2>
-    <p class="muted">Digite a senha que você recebeu junto com o QR code.</p>
-    <input id="inSenha" type="password" placeholder="Senha da campanha" autocomplete="off" />
-    <p id="erroSenha" class="muted" style="color:#d64545;height:16px"></p>
-    <button class="btn-azul full" onclick="checarSenha()">Entrar 🚀</button>
-  </div>
+<!-- ===== TELA 1: SENHA ===== -->
+<div id="telaSenha" class="card center">
+<h2>🔒 Acesso da campanha</h2>
+<p class="muted">Digite a senha que você recebeu junto com o QR code.</p>
+<input id="inSenha" type="password" placeholder="Senha da campanha" autocomplete="off" />
+<p id="erroSenha" class="muted" style="color:#d64545;height:16px"></p>
+<button class="btn-azul full" onclick="checarSenha()">Entrar 🚀</button>
+</div>
 
-  <!-- ===== TELA 2: CADASTRO + AVATAR ===== -->
-  <div id="telaCadastro" class="card hidden">
-    <h2>Monte o seu Miguel! 🎨</h2>
-    <p class="muted">Personalize o personagem do Miguel e entre na disputa.</p>
-    <div class="avatar-box"><div id="avatarPreview"></div></div>
-    <label>Cor de fundo</label>
-    <div class="cores" id="cores"></div>
-    <label>Item / chapéu</label>
-    <div class="opcoes" id="chapeus"></div>
-    <label>Expressão</label>
-    <div class="opcoes" id="expressoes"></div>
-    <label style="margin-top:12px;display:block">Seu nome ou apelido</label>
-    <input id="inNome" maxlength="24" placeholder="Ex: Ana da Baixada" />
-    <button class="btn-verde full" style="margin-top:16px" onclick="salvarCadastro()">Confirmar e começar 💪</button>
-  </div>
+<!-- ===== TELA 2: CADASTRO + AVATAR ===== -->
+<div id="telaCadastro" class="card hidden">
+<h2>Monte o seu Miguel! 🎨</h2>
+<p class="muted">Personalize o personagem do Miguel e entre na disputa.</p>
+<div class="avatar-box"><div id="avatarPreview"></div></div>
+<label>Cor de fundo</label>
+<div class="cores" id="cores"></div>
+<label>Item / chapéu</label>
+<div class="opcoes" id="chapeus"></div>
+<label>Expressão</label>
+<div class="opcoes" id="expressoes"></div>
+<label style="margin-top:12px;display:block">Seu nome ou apelido</label>
+<input id="inNome" maxlength="24" placeholder="Ex: Ana da Baixada" />
+<button class="btn-verde full" style="margin-top:16px" onclick="salvarCadastro()">Confirmar e começar 💪</button>
+</div>
 
-  <!-- ===== TELA 3: APP ===== -->
-  <div id="telaApp" class="hidden">
+<!-- ===== TELA 3: APP ===== -->
+<div id="telaApp" class="hidden">
 
-    <!-- Participação CONFEA-RJ -->
-    <div class="card oficial">
-      <div class="center"><div class="badge">🗳️ Participação • Eleição CREA 2026 RJ</div></div>
-      <div class="part-linha">
-        <div id="donutRJ"></div>
-        <div class="part-nums">
-          <div><span class="dot" style="background:#9fb8cf"></span>Habilitados: <b id="rjHab">—</b></div>
-          <div><span class="dot" style="background:#7CFFB2"></span>Votantes: <b id="rjVot">—</b> <span id="rjVotPct" style="opacity:.85"></span></div>
-          <div><span class="dot" style="background:rgba(255,255,255,.35)"></span>Não votantes: <b id="rjNao">—</b> <span id="rjNaoPct" style="opacity:.85"></span></div>
-        </div>
-      </div>
-      <div class="center" style="font-size:12px;opacity:.9;margin-top:8px">Fonte: vote.confea.org.br (RJ) • atualizado pela coordenação</div>
-    </div>
+<!-- Participação CONFEA-RJ -->
+<div class="card oficial">
+<div class="center"><div class="badge">🗳️ Participação • Eleição CREA 2026 RJ</div></div>
+<div class="part-linha">
+<div id="donutRJ"></div>
+<div class="part-nums">
+<div><span class="dot" style="background:#9fb8cf"></span>Habilitados: <b id="rjHab">—</b></div>
+<div><span class="dot" style="background:#7CFFB2"></span>Votantes: <b id="rjVot">—</b> <span id="rjVotPct" style="opacity:.85"></span></div>
+<div><span class="dot" style="background:rgba(255,255,255,.35)"></span>Não votantes: <b id="rjNao">—</b> <span id="rjNaoPct" style="opacity:.85"></span></div>
+</div>
+</div>
+<div class="center" style="font-size:12px;opacity:.9;margin-top:8px">Fonte: vote.confea.org.br (RJ) • atualizado pela coordenação</div>
+</div>
 
-    <!-- Meta da rede -->
-    <div class="card center">
-      <div class="badge">🎯 Comprovantes da nossa rede</div>
-      <div class="tanque"><div class="agua" id="agua"></div></div>
-      <div><span class="meta-num" id="totalVotos">0</span> <span class="muted">/ 10.000</span></div>
-      <div class="meta-label" id="faltam">Bora bater a meta! 🚀</div>
-    </div>
+<!-- Meta da rede -->
+<div class="card center">
+<div class="badge">🎯 Comprovantes da nossa rede</div>
+<div class="tanque"><div class="agua" id="agua"></div></div>
+<div><span class="meta-num" id="totalVotos">0</span> <span class="muted">/ 10.000</span></div>
+<div class="meta-label" id="faltam">Bora bater a meta! 🚀</div>
+</div>
 
-    <div class="abas">
-      <div class="aba at" id="abaEnviar" onclick="troca('enviar')">📸 Enviar</div>
-      <div class="aba" id="abaBolao" onclick="troca('bolao')">🎲 Bolão</div>
-      <div class="aba" id="abaRank" onclick="troca('rank')">🏆 Ranking</div>
-    </div>
+<div class="abas">
+<div class="aba at" id="abaEnviar" onclick="troca('enviar')">📸 Enviar</div>
+<div class="aba" id="abaBolao" onclick="troca('bolao')">🎲 Bolão</div>
+<div class="aba" id="abaRank" onclick="troca('rank')">🏆 Ranking</div>
+</div>
 
-    <!-- ENVIAR -->
-    <div id="viewEnviar" class="card">
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
-        <div id="meuAvatar" style="width:56px;height:56px;flex:0 0 56px"></div>
-        <div>
-          <div style="font-weight:800" id="meuNome">—</div>
-          <div class="pill"><span id="meusPontos">0</span> ponto(s)</div>
-        </div>
-        <button class="btn-ghost" style="margin-left:auto;padding:9px 14px;font-size:13px" onclick="editarAvatar()">✏️ Editar</button>
-      </div>
-      <p class="muted">Cada pessoa que você levou pra votar vale <b>1 ponto</b>. Basta o <b>nome e o telefone</b> dela — a foto do comprovante é opcional. Cada telefone conta uma vez — o primeiro a enviar leva o ponto! 🥇</p>
-      <label>Nome da pessoa que votou</label>
-      <input id="inVotante" placeholder="Nome completo" />
-      <label style="margin-top:10px;display:block">Telefone da pessoa que votou</label>
-      <input id="inTelefone" type="tel" inputmode="numeric" placeholder="(21) 99999-9999" />
-      <label style="margin-top:10px;display:block">Foto do comprovante (opcional, da galeria)</label>
-      <input id="inFoto" type="file" accept="image/*" onchange="lerFoto(event)" />
-      <img id="preview" class="foto-preview" alt="prévia" />
-      <button class="btn-verde full" style="margin-top:16px" id="btnEnviar" onclick="enviarComprovante()">Marcar ponto ✅</button>
-    </div>
+<!-- ENVIAR -->
+<div id="viewEnviar" class="card">
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
+<div id="meuAvatar" style="width:56px;height:56px;flex:0 0 56px"></div>
+<div>
+<div style="font-weight:800" id="meuNome">—</div>
+<div class="pill"><span id="meusPontos">0</span> ponto(s)</div>
+</div>
+<button class="btn-ghost" style="margin-left:auto;padding:9px 14px;font-size:13px" onclick="editarAvatar()">✏️ Editar</button>
+</div>
+<p class="muted">Cada pessoa que você levou pra votar vale <b>1 ponto</b>. Basta o <b>nome e o telefone</b> dela — a foto do comprovante é opcional. Cada telefone conta uma vez — o primeiro a enviar leva o ponto! 🥇</p>
+<label>Nome da pessoa que votou</label>
+<input id="inVotante" placeholder="Nome completo" />
+<label style="margin-top:10px;display:block">Telefone da pessoa que votou</label>
+<input id="inTelefone" type="tel" inputmode="numeric" placeholder="(21) 99999-9999" />
+<label style="margin-top:10px;display:block">Foto do comprovante (opcional, da galeria)</label>
+<input id="inFoto" type="file" accept="image/*" onchange="lerFoto(event)" />
+<img id="preview" class="foto-preview" alt="prévia" />
+<button class="btn-verde full" style="margin-top:16px" id="btnEnviar" onclick="enviarComprovante()">Marcar ponto ✅</button>
+</div>
 
-    <!-- BOLÃO -->
-    <div id="viewBolao" class="card hidden">
-      <h3>🎲 Bolão dos votos</h3>
-      <p class="muted">Dê seu palpite: quantos votos o <b>RJ</b> terá no total e quantos o <b>Miguel</b> terá. Dá pra mudar até <b>17h de hoje</b>. Quem chegar mais perto do resultado ganha! 🏆</p>
-      <label>Total de votos no RJ (seu palpite)</label>
-      <input id="inPalpiteTotal" type="number" inputmode="numeric" min="0" placeholder="Ex: 5000" />
-      <label style="margin-top:10px;display:block">Votos do Miguel (seu palpite)</label>
-      <input id="inPalpiteMiguel" type="number" inputmode="numeric" min="0" placeholder="Ex: 1200" />
-      <button class="btn-verde full" id="btnPalpite" style="margin-top:16px" onclick="salvarPalpite()">Salvar meu palpite 🎯</button>
-      <div id="bolaoStatus" class="muted center" style="margin-top:8px"></div>
-      <div id="listaBolao" style="margin-top:12px"></div>
-    </div>
+<!-- BOLÃO -->
+<div id="viewBolao" class="card hidden">
+<h3>🎲 Bolão dos votos</h3>
+<p class="muted">Dê seu palpite: quantos votos o <b>RJ</b> terá no total e quantos o <b>Miguel</b> terá. Dá pra mudar até <b>17h de hoje</b>. Quem chegar mais perto do resultado ganha! 🏆</p>
+<label>Total de votos no RJ (seu palpite)</label>
+<input id="inPalpiteTotal" type="number" inputmode="numeric" min="0" placeholder="Ex: 5000" />
+<label style="margin-top:10px;display:block">Votos do Miguel (seu palpite)</label>
+<input id="inPalpiteMiguel" type="number" inputmode="numeric" min="0" placeholder="Ex: 1200" />
+<button class="btn-verde full" id="btnPalpite" style="margin-top:16px" onclick="salvarPalpite()">Salvar meu palpite 🎯</button>
+<div id="bolaoStatus" class="muted center" style="margin-top:8px"></div>
+<div id="listaBolao" style="margin-top:12px"></div>
+</div>
 
-    <!-- RANKING -->
-    <div id="viewRank" class="card hidden">
-      <h3>🏆 Ranking ao vivo</h3>
-      <p class="muted">Atualiza em tempo real conforme os comprovantes chegam.</p>
-      <div id="listaRank"></div>
-    </div>
+<!-- RANKING -->
+<div id="viewRank" class="card hidden">
+<h3>🏆 Ranking ao vivo</h3>
+<p class="muted">Atualiza em tempo real conforme os comprovantes chegam.</p>
+<div id="listaRank"></div>
+</div>
 
-  </div>
+</div>
 
-  <div class="rodape">Vote no Miguel • CREA-RJ 💪</div>
+<div class="rodape">Vote no Miguel • CREA-RJ 💪</div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <!-- ================= CONFIG ================= -->
 <script>
-  const SENHA_ACESSO = "Presidente2026";
-  const FIREBASE_CONFIG = {
-    apiKey: "COLE_AQUI",
-    authDomain: "COLE_AQUI",
-    projectId: "COLE_AQUI",
-    storageBucket: "COLE_AQUI",
-    messagingSenderId: "COLE_AQUI",
-    appId: "COLE_AQUI"
-  };
-  const META = 10000;
-  const RJ_HAB_PADRAO = 69583;                         // eleitores habilitados RJ (do site CONFEA)
-  const DEADLINE_BOLAO = "2026-07-03T17:00:00-03:00";  // apostas até 17h
+const SENHA_ACESSO = "Presidente2026";
+const FIREBASE_CONFIG = {
+apiKey: "AIzaSyBISvM5k7aCZ1bGaY0uawCo1B9juNEZzhs",
+authDomain: "votometro-miguel.firebaseapp.com",
+projectId: "votometro-miguel",
+storageBucket: "votometro-miguel.firebasestorage.app",
+messagingSenderId: "239321830640",
+appId: "1:239321830640:web:189d80dd4f5409b87fde35"
+};
+const META = 10000;
+const RJ_HAB_PADRAO = 69583; // eleitores habilitados RJ (do site CONFEA)
+const DEADLINE_BOLAO = "2026-07-03T17:00:00-03:00"; // apostas até 17h
 </script>
 
 <!-- ================= AVATAR DO MIGUEL ================= -->
 <script>
-  const SKIN="#e9b491", SKIN_SH="#d69e79", BEARD="#241a12", BLAZER="#182741", BLAZER2="#101d31", SHIRT="#f4f7fb";
-  const CORES = ["#2f7ed8","#1c8f5a","#e0a800","#d9534f","#7a4ecf","#e8620f","#0fb5c7","#c2185b"];
-  const CHAPEUS = {nenhum:"🙅", capacete:"⛑️", bone:"🧢", cauboi:"🤠", coroa:"👑"};
-  const EXPRESSOES = {feliz:"😀", comemorando:"🥳", raiva:"😠"};
-  let avatar = {cor:"#2f7ed8", item:"capacete", exp:"feliz"};
+const SKIN="#e9b491", SKIN_SH="#d69e79", BEARD="#241a12", BLAZER="#182741", BLAZER2="#101d31", SHIRT="#f4f7fb";
+const CORES = ["#2f7ed8","#1c8f5a","#e0a800","#d9534f","#7a4ecf","#e8620f","#0fb5c7","#c2185b"];
+const CHAPEUS = {nenhum:"🙅", capacete:"⛑️", bone:"🧢", cauboi:"🤠", coroa:"👑"};
+const EXPRESSOES = {feliz:"😀", comemorando:"🥳", raiva:"😠"};
+let avatar = {cor:"#2f7ed8", item:"capacete", exp:"feliz"};
 
-  function facePart(exp){
-    let eyes, brows, mouth;
-    if(exp==="comemorando"){
-      eyes='<path d="M81 92 Q86 87 91 92" stroke="#241a12" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M109 92 Q114 87 119 92" stroke="#241a12" stroke-width="3.4" fill="none" stroke-linecap="round"/>';
-      brows='<path d="M78 82 Q86 78 94 82" stroke="#241a12" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M106 82 Q114 78 122 82" stroke="#241a12" stroke-width="3.4" fill="none" stroke-linecap="round"/>';
-      mouth='<path d="M82 119 Q100 143 118 119 Q100 129 82 119 Z" fill="#6f2626"/><path d="M86 121 Q100 127 114 121 Z" fill="#fff"/>';
-    } else if(exp==="raiva"){
-      eyes='<circle cx="86" cy="93" r="4.2" fill="#241a12"/><circle cx="114" cy="93" r="4.2" fill="#241a12"/>';
-      brows='<path d="M78 86 L95 90" stroke="#241a12" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M122 86 L105 90" stroke="#241a12" stroke-width="4" fill="none" stroke-linecap="round"/>';
-      mouth='<path d="M86 130 Q100 122 114 130" stroke="#5c2020" stroke-width="4" fill="none" stroke-linecap="round"/>';
-    } else {
-      eyes='<circle cx="86" cy="92" r="4.2" fill="#241a12"/><circle cx="114" cy="92" r="4.2" fill="#241a12"/>';
-      brows='<path d="M79 84 Q86 81 93 84" stroke="#241a12" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M107 84 Q114 81 121 84" stroke="#241a12" stroke-width="3.4" fill="none" stroke-linecap="round"/>';
-      mouth='<path d="M84 121 Q100 133 116 121 Q100 127 84 121 Z" fill="#7a2f2f"/><path d="M88 122 Q100 127 112 122 L112 124 Q100 128 88 124 Z" fill="#fff"/>';
-    }
-    return eyes+brows+mouth;
-  }
-  function hatPart(item){
-    switch(item){
-      case "capacete":
-        return '<path d="M62 66 Q62 38 100 38 Q138 38 138 66 Q100 58 62 66 Z" fill="#ffffff" stroke="#c2ccd6" stroke-width="2"/><path d="M96 40 Q100 38 104 40 L104 64 Q100 61 96 64 Z" fill="#e6ebf1"/><rect x="56" y="62" width="88" height="9" rx="4.5" fill="#eef2f6" stroke="#c2ccd6" stroke-width="1.5"/>';
-      case "bone":
-        return '<path d="M60 62 Q100 30 138 60 Q100 52 60 62 Z" fill="#c62828"/><path d="M58 61 Q40 60 34 68 Q52 66 62 65 Z" fill="#9e1c1c"/><circle cx="100" cy="48" r="11" fill="#ffffff" stroke="#c62828" stroke-width="2"/><text x="100" y="51.5" font-family="Arial" font-size="8" font-weight="bold" fill="#c62828" text-anchor="middle">VOTE</text>';
-      case "cauboi":
-        return '<path d="M36 66 Q60 74 100 74 Q140 74 164 66 Q140 78 100 78 Q60 78 36 66 Z" fill="#6b4321"/><path d="M38 66 Q100 46 162 66 Q140 72 100 72 Q60 72 38 66 Z" fill="#7a4e26"/><path d="M70 63 Q66 32 100 30 Q134 32 130 63 Q100 55 70 63 Z" fill="#7a4e26"/><rect x="70" y="56" width="60" height="8" rx="3" fill="#4f3018"/>';
-      case "coroa":
-        return '<path d="M66 58 L74 34 L88 52 L100 30 L112 52 L126 34 L134 58 Q100 50 66 58 Z" fill="#ffd23f" stroke="#e0a800" stroke-width="2"/><circle cx="74" cy="36" r="3" fill="#ff5d5d"/><circle cx="100" cy="32" r="3" fill="#5db0ff"/><circle cx="126" cy="36" r="3" fill="#5dff9e"/>';
-      default: return '';
-    }
-  }
-  function avatarSVG(a, size){
-    a = a || {cor:"#2f7ed8", item:"nenhum", exp:"feliz"};
-    const item = (a.item!==undefined) ? a.item : "nenhum";
-    size = size||160;
-    return `<svg viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
-  <circle cx="100" cy="104" r="96" fill="${a.cor||'#2f7ed8'}" opacity="0.16"/>
-  <path d="M40 210 Q42 158 74 150 L126 150 Q158 158 160 210 Z" fill="${BLAZER}"/>
-  <path d="M84 150 L100 176 L116 150 Z" fill="${SHIRT}"/>
-  <path d="M84 150 L100 176 L92 152 Z" fill="${BLAZER2}"/>
-  <path d="M116 150 L100 176 L108 152 Z" fill="${BLAZER2}"/>
-  <circle cx="118" cy="182" r="2.5" fill="#3b82c4"/>
-  <path d="M88 138 L88 156 Q100 164 112 156 L112 138 Z" fill="${SKIN_SH}"/>
-  <ellipse cx="60" cy="100" rx="7" ry="11" fill="${SKIN}"/><ellipse cx="140" cy="100" rx="7" ry="11" fill="${SKIN}"/>
-  <path d="M62 92 Q60 50 100 50 Q140 50 138 92 Q138 132 100 140 Q62 132 62 92 Z" fill="${SKIN}"/>
-  <ellipse cx="84" cy="70" rx="16" ry="10" fill="#ffffff" opacity="0.12"/>
-  <path d="M62 92 Q64 128 100 150 Q136 128 138 92 Q132 112 120 116 Q110 120 100 120 Q90 120 80 116 Q68 112 62 92 Z" fill="${BEARD}"/>
-  <path d="M84 112 Q100 120 116 112 Q110 118 100 118 Q90 118 84 112 Z" fill="${BEARD}"/>
-  <path d="M62 92 Q60 78 66 74 Q70 96 74 104 Z" fill="${BEARD}"/>
-  <path d="M138 92 Q140 78 134 74 Q130 96 126 104 Z" fill="${BEARD}"/>
-  ${facePart(a.exp)}
-  <path d="M100 96 Q96 108 100 110 Q104 108 100 96" fill="${SKIN_SH}" opacity="0.7"/>
-  ${hatPart(item)}
+function facePart(exp){
+let eyes, brows, mouth;
+if(exp==="comemorando"){
+eyes='<path d="M81 92 Q86 87 91 92" stroke="#241a12" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M109 92 Q114 87 119 92" stroke="#241a12" stroke-width="3.4" fill="none" stroke-linecap="round"/>';
+brows='<path d="M78 82 Q86 78 94 82" stroke="#241a12" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M106 82 Q114 78 122 82" stroke="#241a12" stroke-width="3.4" fill="none" stroke-linecap="round"/>';
+mouth='<path d="M82 119 Q100 143 118 119 Q100 129 82 119 Z" fill="#6f2626"/><path d="M86 121 Q100 127 114 121 Z" fill="#fff"/>';
+} else if(exp==="raiva"){
+eyes='<circle cx="86" cy="93" r="4.2" fill="#241a12"/><circle cx="114" cy="93" r="4.2" fill="#241a12"/>';
+brows='<path d="M78 86 L95 90" stroke="#241a12" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M122 86 L105 90" stroke="#241a12" stroke-width="4" fill="none" stroke-linecap="round"/>';
+mouth='<path d="M86 130 Q100 122 114 130" stroke="#5c2020" stroke-width="4" fill="none" stroke-linecap="round"/>';
+} else {
+eyes='<circle cx="86" cy="92" r="4.2" fill="#241a12"/><circle cx="114" cy="92" r="4.2" fill="#241a12"/>';
+brows='<path d="M79 84 Q86 81 93 84" stroke="#241a12" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M107 84 Q114 81 121 84" stroke="#241a12" stroke-width="3.4" fill="none" stroke-linecap="round"/>';
+mouth='<path d="M84 121 Q100 133 116 121 Q100 127 84 121 Z" fill="#7a2f2f"/><path d="M88 122 Q100 127 112 122 L112 124 Q100 128 88 124 Z" fill="#fff"/>';
+}
+return eyes+brows+mouth;
+}
+function hatPart(item){
+switch(item){
+case "capacete":
+return '<path d="M62 66 Q62 38 100 38 Q138 38 138 66 Q100 58 62 66 Z" fill="#ffffff" stroke="#c2ccd6" stroke-width="2"/><path d="M96 40 Q100 38 104 40 L104 64 Q100 61 96 64 Z" fill="#e6ebf1"/><rect x="56" y="62" width="88" height="9" rx="4.5" fill="#eef2f6" stroke="#c2ccd6" stroke-width="1.5"/>';
+case "bone":
+return '<path d="M60 62 Q100 30 138 60 Q100 52 60 62 Z" fill="#c62828"/><path d="M58 61 Q40 60 34 68 Q52 66 62 65 Z" fill="#9e1c1c"/><circle cx="100" cy="48" r="11" fill="#ffffff" stroke="#c62828" stroke-width="2"/><text x="100" y="51.5" font-family="Arial" font-size="8" font-weight="bold" fill="#c62828" text-anchor="middle">VOTE</text>';
+case "cauboi":
+return '<path d="M36 66 Q60 74 100 74 Q140 74 164 66 Q140 78 100 78 Q60 78 36 66 Z" fill="#6b4321"/><path d="M38 66 Q100 46 162 66 Q140 72 100 72 Q60 72 38 66 Z" fill="#7a4e26"/><path d="M70 63 Q66 32 100 30 Q134 32 130 63 Q100 55 70 63 Z" fill="#7a4e26"/><rect x="70" y="56" width="60" height="8" rx="3" fill="#4f3018"/>';
+case "coroa":
+return '<path d="M66 58 L74 34 L88 52 L100 30 L112 52 L126 34 L134 58 Q100 50 66 58 Z" fill="#ffd23f" stroke="#e0a800" stroke-width="2"/><circle cx="74" cy="36" r="3" fill="#ff5d5d"/><circle cx="100" cy="32" r="3" fill="#5db0ff"/><circle cx="126" cy="36" r="3" fill="#5dff9e"/>';
+default: return '';
+}
+}
+function avatarSVG(a, size){
+a = a || {cor:"#2f7ed8", item:"nenhum", exp:"feliz"};
+const item = (a.item!==undefined) ? a.item : "nenhum";
+size = size||160;
+return `<svg viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
+<circle cx="100" cy="104" r="96" fill="${a.cor||'#2f7ed8'}" opacity="0.16"/>
+<path d="M40 210 Q42 158 74 150 L126 150 Q158 158 160 210 Z" fill="${BLAZER}"/>
+<path d="M84 150 L100 176 L116 150 Z" fill="${SHIRT}"/>
+<path d="M84 150 L100 176 L92 152 Z" fill="${BLAZER2}"/>
+<path d="M116 150 L100 176 L108 152 Z" fill="${BLAZER2}"/>
+<circle cx="118" cy="182" r="2.5" fill="#3b82c4"/>
+<path d="M88 138 L88 156 Q100 164 112 156 L112 138 Z" fill="${SKIN_SH}"/>
+<ellipse cx="60" cy="100" rx="7" ry="11" fill="${SKIN}"/><ellipse cx="140" cy="100" rx="7" ry="11" fill="${SKIN}"/>
+<path d="M62 92 Q60 50 100 50 Q140 50 138 92 Q138 132 100 140 Q62 132 62 92 Z" fill="${SKIN}"/>
+<ellipse cx="84" cy="70" rx="16" ry="10" fill="#ffffff" opacity="0.12"/>
+<path d="M62 92 Q64 128 100 150 Q136 128 138 92 Q132 112 120 116 Q110 120 100 120 Q90 120 80 116 Q68 112 62 92 Z" fill="${BEARD}"/>
+<path d="M84 112 Q100 120 116 112 Q110 118 100 118 Q90 118 84 112 Z" fill="${BEARD}"/>
+<path d="M62 92 Q60 78 66 74 Q70 96 74 104 Z" fill="${BEARD}"/>
+<path d="M138 92 Q140 78 134 74 Q130 96 126 104 Z" fill="${BEARD}"/>
+${facePart(a.exp)}
+<path d="M100 96 Q96 108 100 110 Q104 108 100 96" fill="${SKIN_SH}" opacity="0.7"/>
+${hatPart(item)}
 </svg>`;
-  }
-  function renderAvatar(){ document.getElementById('avatarPreview').innerHTML = avatarSVG(avatar,160); }
-  function montarOpcoes(){
-    document.getElementById('cores').innerHTML = CORES.map(cor=>`<div class="cor ${cor===avatar.cor?'sel':''}" style="background:${cor}" onclick="setAv('cor','${cor}')"></div>`).join('');
-    const mk=(obj,key)=>Object.entries(obj).map(([k,v])=>`<div class="op ${avatar[key]===k?'sel':''}" onclick="setAv('${key}','${k}')">${v}</div>`).join('');
-    document.getElementById('chapeus').innerHTML=mk(CHAPEUS,'item');
-    document.getElementById('expressoes').innerHTML=mk(EXPRESSOES,'exp');
-  }
-  function setAv(key,val){ avatar[key]=val; renderAvatar(); montarOpcoes(); }
+}
+function renderAvatar(){ document.getElementById('avatarPreview').innerHTML = avatarSVG(avatar,160); }
+function montarOpcoes(){
+document.getElementById('cores').innerHTML = CORES.map(cor=>`<div class="cor ${cor===avatar.cor?'sel':''}" style="background:${cor}" onclick="setAv('cor','${cor}')"></div>`).join('');
+const mk=(obj,key)=>Object.entries(obj).map(([k,v])=>`<div class="op ${avatar[key]===k?'sel':''}" onclick="setAv('${key}','${k}')">${v}</div>`).join('');
+document.getElementById('chapeus').innerHTML=mk(CHAPEUS,'item');
+document.getElementById('expressoes').innerHTML=mk(EXPRESSOES,'exp');
+}
+function setAv(key,val){ avatar[key]=val; renderAvatar(); montarOpcoes(); }
 
-  // Donut de participação (SVG puro, sem libs)
-  function donutSVG(vot, hab, size){
-    size=size||130; const r=52, C=2*Math.PI*r; const f=hab>0?Math.min(1,vot/hab):0;
-    const dash=(f*C).toFixed(1)+' '+C.toFixed(1); const pct=f*100;
-    return `<svg viewBox="0 0 140 140" width="${size}" height="${size}">
-      <circle cx="70" cy="70" r="${r}" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="15"/>
-      <circle cx="70" cy="70" r="${r}" fill="none" stroke="#7CFFB2" stroke-width="15" stroke-linecap="round" stroke-dasharray="${dash}" transform="rotate(-90 70 70)"/>
-      <text x="70" y="66" text-anchor="middle" font-size="21" font-weight="800" fill="#fff">${pct.toFixed(2).replace('.',',')}%</text>
-      <text x="70" y="86" text-anchor="middle" font-size="11" fill="#dbeeff">votantes</text>
-    </svg>`;
-  }
+// Donut de participação (SVG puro, sem libs)
+function donutSVG(vot, hab, size){
+size=size||130; const r=52, C=2*Math.PI*r; const f=hab>0?Math.min(1,vot/hab):0;
+const dash=(f*C).toFixed(1)+' '+C.toFixed(1); const pct=f*100;
+return `<svg viewBox="0 0 140 140" width="${size}" height="${size}">
+<circle cx="70" cy="70" r="${r}" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="15"/>
+<circle cx="70" cy="70" r="${r}" fill="none" stroke="#7CFFB2" stroke-width="15" stroke-linecap="round" stroke-dasharray="${dash}" transform="rotate(-90 70 70)"/>
+<text x="70" y="66" text-anchor="middle" font-size="21" font-weight="800" fill="#fff">${pct.toFixed(2).replace('.',',')}%</text>
+<text x="70" y="86" text-anchor="middle" font-size="11" fill="#dbeeff">votantes</text>
+</svg>`;
+}
 </script>
 
 <!-- ================= APP (módulo) ================= -->
@@ -316,75 +316,75 @@ let uid=null, eu=null, fb=null;
 if(!DEMO){ const app=initializeApp(FIREBASE_CONFIG); fb={auth:getAuth(app), db:getFirestore(app), st:getStorage(app)}; }
 
 const DB = {
-  async login(){
-    if(DEMO){ uid = localStorage.getItem('demo_uid') || ('demo_'+Math.random().toString(36).slice(2)); localStorage.setItem('demo_uid',uid); return uid; }
-    const cred = await signInAnonymously(fb.auth); uid = cred.user.uid; return uid;
-  },
-  async getEu(){
-    if(DEMO){ return JSON.parse(localStorage.getItem('demo_sup_'+uid)||'null'); }
-    const s = await getDoc(doc(fb.db,'apoiadores',uid)); return s.exists()?s.data():null;
-  },
-  async salvarEu(data){
-    if(DEMO){ localStorage.setItem('demo_sup_'+uid, JSON.stringify(data)); demoBroadcast(); return; }
-    await setDoc(doc(fb.db,'apoiadores',uid), data, {merge:true});
-  },
-  async salvarPalpite(p){
-    if(DEMO){ eu.palpite=p; await this.salvarEu(eu); return; }
-    await setDoc(doc(fb.db,'apoiadores',uid), {palpite:p, nome:eu.nome, avatar:eu.avatar}, {merge:true});
-  },
-  async enviar({telefone, nome, blob}){
-    const chave = (telefone||'').replace(/\D/g,'');
-    if(chave.length<10) return {status:'semtelefone'};
-    if(DEMO){
-      const codigos = JSON.parse(localStorage.getItem('demo_codigos')||'{}');
-      if(codigos[chave]) return {status:'duplicado', dono:codigos[chave]};
-      codigos[chave]=eu.nome; localStorage.setItem('demo_codigos',JSON.stringify(codigos));
-      eu.pontos=(eu.pontos||0)+1; await this.salvarEu(eu);
-      const stats=JSON.parse(localStorage.getItem('demo_stats')||'{"total":0}'); stats.total=(stats.total||0)+1; localStorage.setItem('demo_stats',JSON.stringify(stats));
-      demoBroadcast(); return {status:'ok'};
-    }
-    let imagemUrl='';
-    if(blob){ try{ const r=sref(fb.st,'comprovantes/'+chave+'.jpg'); await uploadBytes(r,blob); imagemUrl=await getDownloadURL(r);}catch(e){} }
-    try{
-      await runTransaction(fb.db, async (tx)=>{
-        const cref=doc(fb.db,'comprovantes',chave);
-        const cs=await tx.get(cref);
-        if(cs.exists()) throw {dup:true, dono:cs.data().apoiadorNome};
-        tx.set(cref,{telefone:chave, nome, apoiadorUid:uid, apoiadorNome:eu.nome, imagemUrl, status:'aprovado', criadoEm:serverTimestamp()});
-        tx.set(doc(fb.db,'apoiadores',uid),{pontos:increment(1)},{merge:true});
-        tx.set(doc(fb.db,'stats','global'),{total:increment(1)},{merge:true});
-      });
-      return {status:'ok'};
-    }catch(e){ if(e&&e.dup) return {status:'duplicado', dono:e.dono}; throw e; }
-  },
-  ouvirRanking(cb){
-    if(DEMO){ demoRankCb=cb; demoBroadcast(); return; }
-    onSnapshot(query(collection(fb.db,'apoiadores'), orderBy('pontos','desc'), limit(200)), snap=>{ cb(snap.docs.map(d=>({id:d.id,...d.data()}))); });
-  },
-  ouvirTotal(cb){
-    if(DEMO){ demoTotalCb=cb; demoBroadcast(); return; }
-    onSnapshot(doc(fb.db,'stats','global'), s=> cb((s.data()||{}).total||0));
-  },
-  ouvirParticipacao(cb){
-    if(DEMO){ demoPartCb=cb; demoBroadcast(); return; }
-    onSnapshot(doc(fb.db,'stats','global'), s=>{ const d=s.data()||{}; cb({votantes:d.votosOficiais||0, habilitados:d.rjHabilitados||RJ_HAB_PADRAO}); });
-  },
-  ouvirFinal(cb){
-    if(DEMO){ demoFinalCb=cb; demoBroadcast(); return; }
-    onSnapshot(doc(fb.db,'stats','global'), s=>{ const d=s.data()||{}; cb({total:d.finalTotalRJ, miguel:d.finalMiguel}); });
-  }
+async login(){
+if(DEMO){ uid = localStorage.getItem('demo_uid') || ('demo_'+Math.random().toString(36).slice(2)); localStorage.setItem('demo_uid',uid); return uid; }
+const cred = await signInAnonymously(fb.auth); uid = cred.user.uid; return uid;
+},
+async getEu(){
+if(DEMO){ return JSON.parse(localStorage.getItem('demo_sup_'+uid)||'null'); }
+const s = await getDoc(doc(fb.db,'apoiadores',uid)); return s.exists()?s.data():null;
+},
+async salvarEu(data){
+if(DEMO){ localStorage.setItem('demo_sup_'+uid, JSON.stringify(data)); demoBroadcast(); return; }
+await setDoc(doc(fb.db,'apoiadores',uid), data, {merge:true});
+},
+async salvarPalpite(p){
+if(DEMO){ eu.palpite=p; await this.salvarEu(eu); return; }
+await setDoc(doc(fb.db,'apoiadores',uid), {palpite:p, nome:eu.nome, avatar:eu.avatar}, {merge:true});
+},
+async enviar({telefone, nome, blob}){
+const chave = (telefone||'').replace(/\D/g,'');
+if(chave.length<10) return {status:'semtelefone'};
+if(DEMO){
+const codigos = JSON.parse(localStorage.getItem('demo_codigos')||'{}');
+if(codigos[chave]) return {status:'duplicado', dono:codigos[chave]};
+codigos[chave]=eu.nome; localStorage.setItem('demo_codigos',JSON.stringify(codigos));
+eu.pontos=(eu.pontos||0)+1; await this.salvarEu(eu);
+const stats=JSON.parse(localStorage.getItem('demo_stats')||'{"total":0}'); stats.total=(stats.total||0)+1; localStorage.setItem('demo_stats',JSON.stringify(stats));
+demoBroadcast(); return {status:'ok'};
+}
+let imagemUrl='';
+if(blob){ try{ const r=sref(fb.st,'comprovantes/'+chave+'.jpg'); await uploadBytes(r,blob); imagemUrl=await getDownloadURL(r);}catch(e){} }
+try{
+await runTransaction(fb.db, async (tx)=>{
+const cref=doc(fb.db,'comprovantes',chave);
+const cs=await tx.get(cref);
+if(cs.exists()) throw {dup:true, dono:cs.data().apoiadorNome};
+tx.set(cref,{telefone:chave, nome, apoiadorUid:uid, apoiadorNome:eu.nome, imagemUrl, status:'aprovado', criadoEm:serverTimestamp()});
+tx.set(doc(fb.db,'apoiadores',uid),{pontos:increment(1)},{merge:true});
+tx.set(doc(fb.db,'stats','global'),{total:increment(1)},{merge:true});
+});
+return {status:'ok'};
+}catch(e){ if(e&&e.dup) return {status:'duplicado', dono:e.dono}; throw e; }
+},
+ouvirRanking(cb){
+if(DEMO){ demoRankCb=cb; demoBroadcast(); return; }
+onSnapshot(query(collection(fb.db,'apoiadores'), orderBy('pontos','desc'), limit(200)), snap=>{ cb(snap.docs.map(d=>({id:d.id,...d.data()}))); });
+},
+ouvirTotal(cb){
+if(DEMO){ demoTotalCb=cb; demoBroadcast(); return; }
+onSnapshot(doc(fb.db,'stats','global'), s=> cb((s.data()||{}).total||0));
+},
+ouvirParticipacao(cb){
+if(DEMO){ demoPartCb=cb; demoBroadcast(); return; }
+onSnapshot(doc(fb.db,'stats','global'), s=>{ const d=s.data()||{}; cb({votantes:d.votosOficiais||0, habilitados:d.rjHabilitados||RJ_HAB_PADRAO}); });
+},
+ouvirFinal(cb){
+if(DEMO){ demoFinalCb=cb; demoBroadcast(); return; }
+onSnapshot(doc(fb.db,'stats','global'), s=>{ const d=s.data()||{}; cb({total:d.finalTotalRJ, miguel:d.finalMiguel}); });
+}
 };
 
 let demoRankCb=null, demoTotalCb=null, demoPartCb=null, demoFinalCb=null;
 function demoBroadcast(){
-  const s=JSON.parse(localStorage.getItem('demo_stats')||'{"total":0}');
-  if(demoRankCb){
-    const lista=[]; for(let k in localStorage){ if(k.startsWith('demo_sup_')){ const d=JSON.parse(localStorage[k]); if(d) lista.push({id:k,...d}); } }
-    lista.sort((a,b)=>(b.pontos||0)-(a.pontos||0)); demoRankCb(lista.slice(0,200));
-  }
-  if(demoTotalCb) demoTotalCb(s.total||0);
-  if(demoPartCb) demoPartCb({votantes:s.votosOficiais||0, habilitados:s.rjHabilitados||RJ_HAB_PADRAO});
-  if(demoFinalCb) demoFinalCb({total:s.finalTotalRJ, miguel:s.finalMiguel});
+const s=JSON.parse(localStorage.getItem('demo_stats')||'{"total":0}');
+if(demoRankCb){
+const lista=[]; for(let k in localStorage){ if(k.startsWith('demo_sup_')){ const d=JSON.parse(localStorage[k]); if(d) lista.push({id:k,...d}); } }
+lista.sort((a,b)=>(b.pontos||0)-(a.pontos||0)); demoRankCb(lista.slice(0,200));
+}
+if(demoTotalCb) demoTotalCb(s.total||0);
+if(demoPartCb) demoPartCb({votantes:s.votosOficiais||0, habilitados:s.rjHabilitados||RJ_HAB_PADRAO});
+if(demoFinalCb) demoFinalCb({total:s.finalTotalRJ, miguel:s.finalMiguel});
 }
 window.addEventListener('storage', demoBroadcast);
 
@@ -398,203 +398,203 @@ window.dispatchEvent(new Event('dbpronto'));
 
 <!-- ================= UI / FLUXO ================= -->
 <script>
-  (function(){const b=document.getElementById('bolhas');for(let i=0;i<14;i++){const d=document.createElement('div');d.className='bolha';const s=8+Math.random()*30;d.style.width=d.style.height=s+'px';d.style.left=Math.random()*100+'%';d.style.animationDuration=(6+Math.random()*10)+'s';d.style.animationDelay=(-Math.random()*10)+'s';b.appendChild(d);} })();
+(function(){const b=document.getElementById('bolhas');for(let i=0;i<14;i++){const d=document.createElement('div');d.className='bolha';const s=8+Math.random()*30;d.style.width=d.style.height=s+'px';d.style.left=Math.random()*100+'%';d.style.animationDuration=(6+Math.random()*10)+'s';d.style.animationDelay=(-Math.random()*10)+'s';b.appendChild(d);} })();
 
-  function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3200);}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3200);}
 
-  window.__lista=[]; window.__final={};
+window.__lista=[]; window.__final={};
 
-  window.addEventListener('dbpronto', ()=>{ iniciar(); });
+window.addEventListener('dbpronto', ()=>{ iniciar(); });
 
-  function checarSenha(){
-    const v=document.getElementById('inSenha').value;
-    if(v===SENHA_ACESSO){ sessionStorage.setItem('acesso','1'); document.getElementById('telaSenha').classList.add('hidden'); rotaPosLogin(); }
-    else{ document.getElementById('erroSenha').textContent='Senha incorreta 🙈'; }
-  }
-  window.checarSenha=checarSenha;
+function checarSenha(){
+const v=document.getElementById('inSenha').value;
+if(v===SENHA_ACESSO){ sessionStorage.setItem('acesso','1'); document.getElementById('telaSenha').classList.add('hidden'); rotaPosLogin(); }
+else{ document.getElementById('erroSenha').textContent='Senha incorreta 🙈'; }
+}
+window.checarSenha=checarSenha;
 
-  async function iniciar(){
-    montarOpcoes(); renderAvatar();
-    document.getElementById('logoAvatar').innerHTML = avatarSVG({cor:'#2f7ed8', item:'bone', exp:'feliz'}, 46);
-    if(window.__DEMO){ document.querySelector('.rodape').innerHTML='⚠️ MODO DEMO (dados só neste aparelho) — configure o Firebase para o ranking real. • CREA-RJ'; }
-    if(sessionStorage.getItem('acesso')==='1'){ document.getElementById('telaSenha').classList.add('hidden'); rotaPosLogin(); }
-  }
+async function iniciar(){
+montarOpcoes(); renderAvatar();
+document.getElementById('logoAvatar').innerHTML = avatarSVG({cor:'#2f7ed8', item:'bone', exp:'feliz'}, 46);
+if(window.__DEMO){ document.querySelector('.rodape').innerHTML='⚠️ MODO DEMO (dados só neste aparelho) — configure o Firebase para o ranking real. • CREA-RJ'; }
+if(sessionStorage.getItem('acesso')==='1'){ document.getElementById('telaSenha').classList.add('hidden'); rotaPosLogin(); }
+}
 
-  async function rotaPosLogin(){
-    const uid = await window.__DB.login(); window.__setUid(uid);
-    const eu = await window.__DB.getEu();
-    if(eu){ window.__setEu(eu); abrirApp(); }
-    else { document.getElementById('telaCadastro').classList.remove('hidden'); }
-  }
+async function rotaPosLogin(){
+const uid = await window.__DB.login(); window.__setUid(uid);
+const eu = await window.__DB.getEu();
+if(eu){ window.__setEu(eu); abrirApp(); }
+else { document.getElementById('telaCadastro').classList.remove('hidden'); }
+}
 
-  async function salvarCadastro(){
-    const nome=document.getElementById('inNome').value.trim();
-    if(nome.length<2){ toast('Escreva seu nome 🙂'); return; }
-    const atual=window.__getEu()||{};
-    const eu={nome, avatar:Object.assign({},avatar), pontos:atual.pontos||0, palpite:atual.palpite||null, criadoEm:atual.criadoEm||Date.now()};
-    window.__setEu(eu); await window.__DB.salvarEu(eu);
-    document.getElementById('telaCadastro').classList.add('hidden');
-    abrirApp();
-  }
-  window.salvarCadastro=salvarCadastro;
+async function salvarCadastro(){
+const nome=document.getElementById('inNome').value.trim();
+if(nome.length<2){ toast('Escreva seu nome 🙂'); return; }
+const atual=window.__getEu()||{};
+const eu={nome, avatar:Object.assign({},avatar), pontos:atual.pontos||0, palpite:atual.palpite||null, criadoEm:atual.criadoEm||Date.now()};
+window.__setEu(eu); await window.__DB.salvarEu(eu);
+document.getElementById('telaCadastro').classList.add('hidden');
+abrirApp();
+}
+window.salvarCadastro=salvarCadastro;
 
-  function editarAvatar(){
-    const eu=window.__getEu()||{};
-    avatar=Object.assign({cor:'#2f7ed8', item:'capacete', exp:'feliz'}, eu.avatar||{});
-    document.getElementById('inNome').value=eu.nome||'';
-    montarOpcoes(); renderAvatar();
-    document.getElementById('telaApp').classList.add('hidden');
-    document.getElementById('telaCadastro').classList.remove('hidden');
-    window.scrollTo(0,0);
-  }
-  window.editarAvatar=editarAvatar;
+function editarAvatar(){
+const eu=window.__getEu()||{};
+avatar=Object.assign({cor:'#2f7ed8', item:'capacete', exp:'feliz'}, eu.avatar||{});
+document.getElementById('inNome').value=eu.nome||'';
+montarOpcoes(); renderAvatar();
+document.getElementById('telaApp').classList.add('hidden');
+document.getElementById('telaCadastro').classList.remove('hidden');
+window.scrollTo(0,0);
+}
+window.editarAvatar=editarAvatar;
 
-  function abrirApp(){
-    const eu=window.__getEu();
-    document.getElementById('telaApp').classList.remove('hidden');
-    document.getElementById('meuNome').textContent=eu.nome;
-    document.getElementById('meuAvatar').innerHTML=avatarSVG(eu.avatar,56);
-    document.getElementById('meusPontos').textContent=eu.pontos||0;
+function abrirApp(){
+const eu=window.__getEu();
+document.getElementById('telaApp').classList.remove('hidden');
+document.getElementById('meuNome').textContent=eu.nome;
+document.getElementById('meuAvatar').innerHTML=avatarSVG(eu.avatar,56);
+document.getElementById('meusPontos').textContent=eu.pontos||0;
 
-    window.__DB.ouvirParticipacao(p=>{
-      document.getElementById('donutRJ').innerHTML=donutSVG(p.votantes,p.habilitados,130);
-      const hab=p.habilitados||0, vot=p.votantes||0, nao=Math.max(0,hab-vot);
-      document.getElementById('rjHab').textContent=hab.toLocaleString('pt-BR');
-      document.getElementById('rjVot').textContent=vot.toLocaleString('pt-BR');
-      document.getElementById('rjNao').textContent=nao.toLocaleString('pt-BR');
-      const vp=hab>0?(vot/hab*100):0;
-      document.getElementById('rjVotPct').textContent='('+vp.toFixed(2).replace('.',',')+'%)';
-      document.getElementById('rjNaoPct').textContent='('+(100-vp).toFixed(2).replace('.',',')+'%)';
-    });
+window.__DB.ouvirParticipacao(p=>{
+document.getElementById('donutRJ').innerHTML=donutSVG(p.votantes,p.habilitados,130);
+const hab=p.habilitados||0, vot=p.votantes||0, nao=Math.max(0,hab-vot);
+document.getElementById('rjHab').textContent=hab.toLocaleString('pt-BR');
+document.getElementById('rjVot').textContent=vot.toLocaleString('pt-BR');
+document.getElementById('rjNao').textContent=nao.toLocaleString('pt-BR');
+const vp=hab>0?(vot/hab*100):0;
+document.getElementById('rjVotPct').textContent='('+vp.toFixed(2).replace('.',',')+'%)';
+document.getElementById('rjNaoPct').textContent='('+(100-vp).toFixed(2).replace('.',',')+'%)';
+});
 
-    window.__DB.ouvirTotal(t=>{
-      document.getElementById('totalVotos').textContent=t.toLocaleString('pt-BR');
-      document.getElementById('agua').style.width=Math.min(100,(t/META)*100)+'%';
-      const falta=Math.max(0,META-t);
-      document.getElementById('faltam').textContent = falta>0? `Faltam ${falta.toLocaleString('pt-BR')} comprovantes pra meta! 🚀` : '🎉 META BATIDA! Obrigado!';
-    });
+window.__DB.ouvirTotal(t=>{
+document.getElementById('totalVotos').textContent=t.toLocaleString('pt-BR');
+document.getElementById('agua').style.width=Math.min(100,(t/META)*100)+'%';
+const falta=Math.max(0,META-t);
+document.getElementById('faltam').textContent = falta>0? `Faltam ${falta.toLocaleString('pt-BR')} comprovantes pra meta! 🚀` : '🎉 META BATIDA! Obrigado!';
+});
 
-    window.__DB.ouvirFinal(f=>{ window.__final=f||{}; renderBolao(window.__lista); });
+window.__DB.ouvirFinal(f=>{ window.__final=f||{}; renderBolao(window.__lista); });
 
-    window.__DB.ouvirRanking(lista=>{
-      window.__lista=lista;
-      const meuNome=window.__getEu().nome;
-      const medal=p=>p===1?'🥇':p===2?'🥈':p===3?'🥉':'';
-      document.getElementById('listaRank').innerHTML = lista.map((s,i)=>{
-        const pos=i+1; const euFlag=s.nome===meuNome;
-        return `<div class="rk ${pos===1?'top1':''} ${euFlag?'eu':''}">
-          <div class="pos">${medal(pos)||pos}</div>
-          <div class="mini">${avatarSVG(s.avatar,46)}</div>
-          <div class="nome">${s.nome}${euFlag?' <span class="pill">você</span>':''}</div>
-          <div class="pts">${s.pontos||0}</div>
-        </div>`;
-      }).join('') || '<p class="muted center">Seja o primeiro a marcar ponto! 🥇</p>';
-      const meu=lista.find(s=>s.nome===meuNome); if(meu){ document.getElementById('meusPontos').textContent=meu.pontos||0; const e=window.__getEu(); e.pontos=meu.pontos; if(meu.palpite&&!e.palpite) e.palpite=meu.palpite; }
-      renderBolao(lista);
-    });
-  }
+window.__DB.ouvirRanking(lista=>{
+window.__lista=lista;
+const meuNome=window.__getEu().nome;
+const medal=p=>p===1?'🥇':p===2?'🥈':p===3?'🥉':'';
+document.getElementById('listaRank').innerHTML = lista.map((s,i)=>{
+const pos=i+1; const euFlag=s.nome===meuNome;
+return `<div class="rk ${pos===1?'top1':''} ${euFlag?'eu':''}">
+<div class="pos">${medal(pos)||pos}</div>
+<div class="mini">${avatarSVG(s.avatar,46)}</div>
+<div class="nome">${s.nome}${euFlag?' <span class="pill">você</span>':''}</div>
+<div class="pts">${s.pontos||0}</div>
+</div>`;
+}).join('') || '<p class="muted center">Seja o primeiro a marcar ponto! 🥇</p>';
+const meu=lista.find(s=>s.nome===meuNome); if(meu){ document.getElementById('meusPontos').textContent=meu.pontos||0; const e=window.__getEu(); e.pontos=meu.pontos; if(meu.palpite&&!e.palpite) e.palpite=meu.palpite; }
+renderBolao(lista);
+});
+}
 
-  function troca(qual){
-    document.getElementById('abaEnviar').classList.toggle('at',qual==='enviar');
-    document.getElementById('abaBolao').classList.toggle('at',qual==='bolao');
-    document.getElementById('abaRank').classList.toggle('at',qual==='rank');
-    document.getElementById('viewEnviar').classList.toggle('hidden',qual!=='enviar');
-    document.getElementById('viewBolao').classList.toggle('hidden',qual!=='bolao');
-    document.getElementById('viewRank').classList.toggle('hidden',qual!=='rank');
-    if(qual==='bolao') abrirBolao();
-  }
-  window.troca=troca;
+function troca(qual){
+document.getElementById('abaEnviar').classList.toggle('at',qual==='enviar');
+document.getElementById('abaBolao').classList.toggle('at',qual==='bolao');
+document.getElementById('abaRank').classList.toggle('at',qual==='rank');
+document.getElementById('viewEnviar').classList.toggle('hidden',qual!=='enviar');
+document.getElementById('viewBolao').classList.toggle('hidden',qual!=='bolao');
+document.getElementById('viewRank').classList.toggle('hidden',qual!=='rank');
+if(qual==='bolao') abrirBolao();
+}
+window.troca=troca;
 
-  /* ---------- BOLÃO ---------- */
-  function bolaoEncerrado(){ return Date.now() > new Date(DEADLINE_BOLAO).getTime(); }
+/* ---------- BOLÃO ---------- */
+function bolaoEncerrado(){ return Date.now() > new Date(DEADLINE_BOLAO).getTime(); }
 
-  function abrirBolao(){
-    const eu=window.__getEu();
-    if(eu && eu.palpite){
-      document.getElementById('inPalpiteTotal').value = (eu.palpite.total??'');
-      document.getElementById('inPalpiteMiguel').value = (eu.palpite.miguel??'');
-    }
-    const enc=bolaoEncerrado();
-    ['inPalpiteTotal','inPalpiteMiguel','btnPalpite'].forEach(id=>document.getElementById(id).disabled=enc);
-    document.getElementById('btnPalpite').style.opacity=enc?.5:1;
-    document.getElementById('bolaoStatus').textContent = enc ? '⏰ Apostas encerradas (17h). Aguardando o resultado final.' : '✏️ Você pode alterar seu palpite até as 17h de hoje.';
-    renderBolao(window.__lista);
-  }
+function abrirBolao(){
+const eu=window.__getEu();
+if(eu && eu.palpite){
+document.getElementById('inPalpiteTotal').value = (eu.palpite.total??'');
+document.getElementById('inPalpiteMiguel').value = (eu.palpite.miguel??'');
+}
+const enc=bolaoEncerrado();
+['inPalpiteTotal','inPalpiteMiguel','btnPalpite'].forEach(id=>document.getElementById(id).disabled=enc);
+document.getElementById('btnPalpite').style.opacity=enc?.5:1;
+document.getElementById('bolaoStatus').textContent = enc ? '⏰ Apostas encerradas (17h). Aguardando o resultado final.' : '✏️ Você pode alterar seu palpite até as 17h de hoje.';
+renderBolao(window.__lista);
+}
 
-  async function salvarPalpite(){
-    if(bolaoEncerrado()){ toast('⏰ As apostas já encerraram (17h).'); return; }
-    const total=parseInt(document.getElementById('inPalpiteTotal').value,10);
-    const miguel=parseInt(document.getElementById('inPalpiteMiguel').value,10);
-    if(isNaN(total)||total<0){ toast('Informe o palpite do total do RJ 🎯'); return; }
-    if(isNaN(miguel)||miguel<0){ toast('Informe o palpite dos votos do Miguel 🎯'); return; }
-    const p={total, miguel, em:Date.now()};
-    const eu=window.__getEu(); eu.palpite=p; window.__setEu(eu);
-    const btn=document.getElementById('btnPalpite'); btn.disabled=true; const o=btn.innerHTML; btn.innerHTML='Salvando... <span class="spin"></span>';
-    try{ await window.__DB.salvarPalpite(p); toast('🎯 Palpite salvo! Pode mudar até 17h.'); }
-    catch(e){ toast('Erro ao salvar palpite.'); console.error(e); }
-    btn.disabled=false; btn.innerHTML=o;
-  }
-  window.salvarPalpite=salvarPalpite;
+async function salvarPalpite(){
+if(bolaoEncerrado()){ toast('⏰ As apostas já encerraram (17h).'); return; }
+const total=parseInt(document.getElementById('inPalpiteTotal').value,10);
+const miguel=parseInt(document.getElementById('inPalpiteMiguel').value,10);
+if(isNaN(total)||total<0){ toast('Informe o palpite do total do RJ 🎯'); return; }
+if(isNaN(miguel)||miguel<0){ toast('Informe o palpite dos votos do Miguel 🎯'); return; }
+const p={total, miguel, em:Date.now()};
+const eu=window.__getEu(); eu.palpite=p; window.__setEu(eu);
+const btn=document.getElementById('btnPalpite'); btn.disabled=true; const o=btn.innerHTML; btn.innerHTML='Salvando... <span class="spin"></span>';
+try{ await window.__DB.salvarPalpite(p); toast('🎯 Palpite salvo! Pode mudar até 17h.'); }
+catch(e){ toast('Erro ao salvar palpite.'); console.error(e); }
+btn.disabled=false; btn.innerHTML=o;
+}
+window.salvarPalpite=salvarPalpite;
 
-  function renderBolao(lista){
-    lista = lista||[];
-    const fin=window.__final||{};
-    const temFinal = (fin.total!=null && fin.total!=='') || (fin.miguel!=null && fin.miguel!=='');
-    let arr=lista.filter(s=>s.palpite && s.palpite.total!=null);
-    if(temFinal){
-      const ft=Number(fin.total||0), fm=Number(fin.miguel||0);
-      arr=arr.map(s=>({...s, err:Math.abs((s.palpite.total||0)-ft)+Math.abs((s.palpite.miguel||0)-fm)}));
-      arr.sort((a,b)=>a.err-b.err);
-    } else {
-      arr.sort((a,b)=>(a.nome||'').localeCompare(b.nome||''));
-    }
-    const el=document.getElementById('listaBolao');
-    if(!el) return;
-    let head='<div style="font-weight:700;margin:6px 0;color:var(--azul-esc)">🎲 Palpites'+(temFinal?' — resultado final':'')+'</div>';
-    if(temFinal){ head+=`<p class="muted">Resultado: RJ <b>${Number(fin.total||0).toLocaleString('pt-BR')}</b> • Miguel <b>${Number(fin.miguel||0).toLocaleString('pt-BR')}</b></p>`; }
-    if(!arr.length){ el.innerHTML=head+'<p class="muted center">Ninguém deu palpite ainda. Seja o primeiro! 🎯</p>'; return; }
-    el.innerHTML = head + arr.map((s,i)=>{
-      const win = temFinal && i===0;
-      return `<div class="rk ${win?'eu':''}">
-        <div class="mini">${avatarSVG(s.avatar,46)}</div>
-        <div class="nome">${s.nome}${win?' 🏆 <span class="pill">vencedor</span>':''}
-          <div class="muted" style="font-weight:400">RJ: ${(s.palpite.total||0).toLocaleString('pt-BR')} • Miguel: ${(s.palpite.miguel||0).toLocaleString('pt-BR')}</div>
-        </div>
-        ${temFinal?`<div class="pts">Δ ${s.err.toLocaleString('pt-BR')}</div>`:''}
-      </div>`;
-    }).join('');
-  }
+function renderBolao(lista){
+lista = lista||[];
+const fin=window.__final||{};
+const temFinal = (fin.total!=null && fin.total!=='') || (fin.miguel!=null && fin.miguel!=='');
+let arr=lista.filter(s=>s.palpite && s.palpite.total!=null);
+if(temFinal){
+const ft=Number(fin.total||0), fm=Number(fin.miguel||0);
+arr=arr.map(s=>({...s, err:Math.abs((s.palpite.total||0)-ft)+Math.abs((s.palpite.miguel||0)-fm)}));
+arr.sort((a,b)=>a.err-b.err);
+} else {
+arr.sort((a,b)=>(a.nome||'').localeCompare(b.nome||''));
+}
+const el=document.getElementById('listaBolao');
+if(!el) return;
+let head='<div style="font-weight:700;margin:6px 0;color:var(--azul-esc)">🎲 Palpites'+(temFinal?' — resultado final':'')+'</div>';
+if(temFinal){ head+=`<p class="muted">Resultado: RJ <b>${Number(fin.total||0).toLocaleString('pt-BR')}</b> • Miguel <b>${Number(fin.miguel||0).toLocaleString('pt-BR')}</b></p>`; }
+if(!arr.length){ el.innerHTML=head+'<p class="muted center">Ninguém deu palpite ainda. Seja o primeiro! 🎯</p>'; return; }
+el.innerHTML = head + arr.map((s,i)=>{
+const win = temFinal && i===0;
+return `<div class="rk ${win?'eu':''}">
+<div class="mini">${avatarSVG(s.avatar,46)}</div>
+<div class="nome">${s.nome}${win?' 🏆 <span class="pill">vencedor</span>':''}
+<div class="muted" style="font-weight:400">RJ: ${(s.palpite.total||0).toLocaleString('pt-BR')} • Miguel: ${(s.palpite.miguel||0).toLocaleString('pt-BR')}</div>
+</div>
+${temFinal?`<div class="pts">Δ ${s.err.toLocaleString('pt-BR')}</div>`:''}
+</div>`;
+}).join('');
+}
 
-  /* ---------- COMPROVANTE ---------- */
-  let fotoBlob=null;
-  function lerFoto(ev){
-    const f=ev.target.files[0]; if(!f) return;
-    fotoBlob=f;
-    const img=document.getElementById('preview'); img.src=URL.createObjectURL(f); img.style.display='block';
-  }
-  window.lerFoto=lerFoto;
+/* ---------- COMPROVANTE ---------- */
+let fotoBlob=null;
+function lerFoto(ev){
+const f=ev.target.files[0]; if(!f) return;
+fotoBlob=f;
+const img=document.getElementById('preview'); img.src=URL.createObjectURL(f); img.style.display='block';
+}
+window.lerFoto=lerFoto;
 
-  async function enviarComprovante(){
-    const nome=document.getElementById('inVotante').value.trim();
-    const telefone=document.getElementById('inTelefone').value.trim();
-    const tel=telefone.replace(/\D/g,'');
-    if(!nome){ toast('Informe o nome da pessoa que votou'); return; }
-    if(tel.length<10){ toast('Informe um telefone válido com DDD 📱'); return; }
-    // foto é opcional
-    const btn=document.getElementById('btnEnviar'); btn.disabled=true; const orig=btn.innerHTML; btn.innerHTML='Enviando... <span class="spin"></span>';
-    try{
-      const r=await window.__DB.enviar({telefone:tel, nome, blob:fotoBlob});
-      if(r.status==='ok'){ toast('🎉 +1 ponto! Mandou bem!'); confete(); limparForm(); troca('rank'); }
-      else if(r.status==='duplicado'){ toast('😅 Esse telefone já foi registrado'+(r.dono?(' por '+r.dono):'')+'.'); }
-      else if(r.status==='semtelefone'){ toast('Telefone inválido, confira.'); }
-    }catch(e){ toast('Erro ao enviar. Tente de novo.'); console.error(e); }
-    btn.disabled=false; btn.innerHTML=orig;
-  }
-  window.enviarComprovante=enviarComprovante;
+async function enviarComprovante(){
+const nome=document.getElementById('inVotante').value.trim();
+const telefone=document.getElementById('inTelefone').value.trim();
+const tel=telefone.replace(/\D/g,'');
+if(!nome){ toast('Informe o nome da pessoa que votou'); return; }
+if(tel.length<10){ toast('Informe um telefone válido com DDD 📱'); return; }
+// foto é opcional
+const btn=document.getElementById('btnEnviar'); btn.disabled=true; const orig=btn.innerHTML; btn.innerHTML='Enviando... <span class="spin"></span>';
+try{
+const r=await window.__DB.enviar({telefone:tel, nome, blob:fotoBlob});
+if(r.status==='ok'){ toast('🎉 +1 ponto! Mandou bem!'); confete(); limparForm(); troca('rank'); }
+else if(r.status==='duplicado'){ toast('😅 Esse telefone já foi registrado'+(r.dono?(' por '+r.dono):'')+'.'); }
+else if(r.status==='semtelefone'){ toast('Telefone inválido, confira.'); }
+}catch(e){ toast('Erro ao enviar. Tente de novo.'); console.error(e); }
+btn.disabled=false; btn.innerHTML=orig;
+}
+window.enviarComprovante=enviarComprovante;
 
-  function limparForm(){ fotoBlob=null; document.getElementById('inFoto').value=''; document.getElementById('inVotante').value=''; document.getElementById('inTelefone').value=''; document.getElementById('preview').style.display='none'; }
+function limparForm(){ fotoBlob=null; document.getElementById('inFoto').value=''; document.getElementById('inVotante').value=''; document.getElementById('inTelefone').value=''; document.getElementById('preview').style.display='none'; }
 
-  function confete(){ for(let i=0;i<40;i++){ const c=document.createElement('div'); c.textContent=['🎉','⭐','✅','🗳️','🥇'][Math.floor(Math.random()*5)]; c.style.cssText=`position:fixed;left:${Math.random()*100}%;top:-20px;font-size:${14+Math.random()*18}px;z-index:60;pointer-events:none;transition:transform 2.2s ease-in,opacity 2.2s`; document.body.appendChild(c); requestAnimationFrame(()=>{ c.style.transform=`translateY(${window.innerHeight+40}px) rotate(${Math.random()*720}deg)`; c.style.opacity='0'; }); setTimeout(()=>c.remove(),2300);} }
+function confete(){ for(let i=0;i<40;i++){ const c=document.createElement('div'); c.textContent=['🎉','⭐','✅','🗳️','🥇'][Math.floor(Math.random()*5)]; c.style.cssText=`position:fixed;left:${Math.random()*100}%;top:-20px;font-size:${14+Math.random()*18}px;z-index:60;pointer-events:none;transition:transform 2.2s ease-in,opacity 2.2s`; document.body.appendChild(c); requestAnimationFrame(()=>{ c.style.transform=`translateY(${window.innerHeight+40}px) rotate(${Math.random()*720}deg)`; c.style.opacity='0'; }); setTimeout(()=>c.remove(),2300);} }
 </script>
 </body>
 </html>
