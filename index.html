@@ -166,12 +166,12 @@
         </div>
         <button class="btn-ghost" style="margin-left:auto;padding:9px 14px;font-size:13px" onclick="editarAvatar()">✏️ Editar</button>
       </div>
-      <p class="muted">Cada pessoa que você levou pra votar vale <b>1 ponto</b>. Registre o nome e o telefone dela e anexe a foto do comprovante. Cada telefone conta uma vez — o primeiro a enviar leva o ponto! 🥇</p>
+      <p class="muted">Cada pessoa que você levou pra votar vale <b>1 ponto</b>. Basta o <b>nome e o telefone</b> dela — a foto do comprovante é opcional. Cada telefone conta uma vez — o primeiro a enviar leva o ponto! 🥇</p>
       <label>Nome da pessoa que votou</label>
       <input id="inVotante" placeholder="Nome completo" />
       <label style="margin-top:10px;display:block">Telefone da pessoa que votou</label>
       <input id="inTelefone" type="tel" inputmode="numeric" placeholder="(21) 99999-9999" />
-      <label style="margin-top:10px;display:block">Foto do comprovante (da galeria)</label>
+      <label style="margin-top:10px;display:block">Foto do comprovante (opcional, da galeria)</label>
       <input id="inFoto" type="file" accept="image/*" onchange="lerFoto(event)" />
       <img id="preview" class="foto-preview" alt="prévia" />
       <button class="btn-verde full" style="margin-top:16px" id="btnEnviar" onclick="enviarComprovante()">Marcar ponto ✅</button>
@@ -344,7 +344,7 @@ const DB = {
       demoBroadcast(); return {status:'ok'};
     }
     let imagemUrl='';
-    try{ const r=sref(fb.st,'comprovantes/'+chave+'.jpg'); await uploadBytes(r,blob); imagemUrl=await getDownloadURL(r);}catch(e){}
+    if(blob){ try{ const r=sref(fb.st,'comprovantes/'+chave+'.jpg'); await uploadBytes(r,blob); imagemUrl=await getDownloadURL(r);}catch(e){} }
     try{
       await runTransaction(fb.db, async (tx)=>{
         const cref=doc(fb.db,'comprovantes',chave);
@@ -580,7 +580,7 @@ window.dispatchEvent(new Event('dbpronto'));
     const tel=telefone.replace(/\D/g,'');
     if(!nome){ toast('Informe o nome da pessoa que votou'); return; }
     if(tel.length<10){ toast('Informe um telefone válido com DDD 📱'); return; }
-    if(!fotoBlob){ toast('Anexe a foto do comprovante 📸'); return; }
+    // foto é opcional
     const btn=document.getElementById('btnEnviar'); btn.disabled=true; const orig=btn.innerHTML; btn.innerHTML='Enviando... <span class="spin"></span>';
     try{
       const r=await window.__DB.enviar({telefone:tel, nome, blob:fotoBlob});
