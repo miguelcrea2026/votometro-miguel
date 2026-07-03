@@ -14,11 +14,12 @@
   .card{background:#fff;border-radius:18px;box-shadow:var(--sombra);padding:20px;margin-bottom:16px}
   h2,h3{margin:0 0 12px}
   input{width:100%;padding:12px;border:2px solid #e2edf6;border-radius:10px;font-size:16px}
+  .fld{display:inline-block;max-width:220px;margin:4px 8px 4px 0;vertical-align:top}
+  .fld small{display:block;color:#5b7180;font-size:12px;margin-bottom:2px}
   button{cursor:pointer;border:0;border-radius:10px;font-weight:700;padding:10px 16px;color:#fff;font-size:14px}
   .btn-azul{background:var(--azul)}
   .btn-verde{background:var(--verde-esc)}
   .btn-vermelho{background:#d64545}
-  .btn-ghost{background:#eef5fb;color:var(--azul-esc)}
   .hidden{display:none!important}
   .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
   .kpi{background:linear-gradient(135deg,#f7fbfe,#eaf6ff);border-radius:14px;padding:16px;text-align:center}
@@ -51,14 +52,21 @@
   </div>
 
   <div id="painel" class="hidden">
+
     <div class="card">
-      <h3>🗳️ Votos contabilizados no Rio (CONFEA)</h3>
-      <p class="muted">Consulte o número em <b>vote.confea.org.br</b> (RJ) e atualize aqui. Ele aparece ao vivo para todos os apoiadores no topo do app.</p>
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <input id="inOficial" type="number" min="0" placeholder="Ex: 1234" style="max-width:220px" />
-        <button class="btn-verde" onclick="salvarOficial()">Salvar</button>
-        <span id="oficialMsg" class="muted"></span>
-      </div>
+      <h3>🗳️ Participação — Eleição CREA 2026 RJ</h3>
+      <p class="muted">Consulte em <b>vote.confea.org.br</b> (RJ) e atualize. Alimenta o gráfico de rosquinha no topo do app, ao vivo.</p>
+      <div class="fld"><small>Eleitores habilitados</small><input id="inHab" type="number" min="0" placeholder="69583" /></div>
+      <div class="fld"><small>Eleitores votantes</small><input id="inVot" type="number" min="0" placeholder="Ex: 637" /></div>
+      <div><button class="btn-verde" onclick="salvarParticipacao()">Salvar participação</button> <span id="partMsg" class="muted"></span></div>
+    </div>
+
+    <div class="card">
+      <h3>🎲 Bolão — resultado final</h3>
+      <p class="muted">Preencha só quando a apuração terminar. Ao salvar, o app mostra o vencedor (quem chegou mais perto).</p>
+      <div class="fld"><small>Total de votos no RJ (final)</small><input id="inFinTotal" type="number" min="0" placeholder="Ex: 5210" /></div>
+      <div class="fld"><small>Votos do Miguel (final)</small><input id="inFinMiguel" type="number" min="0" placeholder="Ex: 1180" /></div>
+      <div><button class="btn-verde" onclick="salvarFinal()">Salvar resultado</button> <span id="finMsg" class="muted"></span></div>
     </div>
 
     <div class="card">
@@ -73,8 +81,8 @@
     </div>
 
     <div class="card">
-      <h3>🏆 Ranking completo</h3>
-      <div style="overflow-x:auto"><table id="tRank"><thead><tr><th>#</th><th>Apoiador</th><th>Pontos</th></tr></thead><tbody></tbody></table></div>
+      <h3>🏆 Ranking + palpites do bolão</h3>
+      <div style="overflow-x:auto"><table id="tRank"><thead><tr><th>#</th><th>Apoiador</th><th>Pontos</th><th>Palpite RJ</th><th>Palpite Miguel</th></tr></thead><tbody></tbody></table></div>
     </div>
 
     <div class="card">
@@ -89,10 +97,8 @@
 <div class="modal" id="modal" onclick="this.style.display='none'"><img id="modalImg" src="" alt=""></div>
 
 <script>
-  /* ⚙️ senha de admin — troque aqui */
   const SENHA_ADMIN = "miguel-admin-2026";
   const META = 10000;
-  /* ⚙️ mesma config do index.html */
   const FIREBASE_CONFIG = {
     apiKey: "COLE_AQUI",
     authDomain: "COLE_AQUI",
@@ -120,7 +126,6 @@ import { getFirestore, doc, setDoc, deleteDoc, collection, query, orderBy, limit
 const DEMO = FIREBASE_CONFIG.apiKey === "COLE_AQUI";
 let fb=null;
 if(!DEMO){ const app=initializeApp(FIREBASE_CONFIG); fb={auth:getAuth(app), db:getFirestore(app)}; }
-
 function fmt(n){ return (n||0).toLocaleString('pt-BR'); }
 
 function pintar(total, apoiadores){
@@ -132,39 +137,48 @@ function pintar(total, apoiadores){
   document.getElementById('bar').style.width=pct+'%';
 }
 
-let oficialTocado=false;
-document.addEventListener('input', e=>{ if(e.target && e.target.id==='inOficial') oficialTocado=true; });
-function prefillOficial(v){ if(!oficialTocado){ const el=document.getElementById('inOficial'); if(el && v) el.value=v; } }
+const tocado={};
+document.addEventListener('input', e=>{ if(e.target && e.target.id) tocado[e.target.id]=true; });
+function prefill(id,v){ if(!tocado[id]){ const el=document.getElementById(id); if(el && v!=null && v!=='' ) el.value=v; } }
 
-async function salvarOficial(){
-  const n=parseInt(document.getElementById('inOficial').value,10);
-  const msg=document.getElementById('oficialMsg');
-  if(isNaN(n)||n<0){ msg.textContent='Digite um número válido'; return; }
+async function salvarParticipacao(){
+  const hab=parseInt(document.getElementById('inHab').value,10);
+  const vot=parseInt(document.getElementById('inVot').value,10);
+  const msg=document.getElementById('partMsg');
+  if(isNaN(hab)||isNaN(vot)||hab<0||vot<0){ msg.textContent='Preencha habilitados e votantes.'; return; }
   msg.textContent='Salvando...';
-  if(DEMO){
-    const s=JSON.parse(localStorage.getItem('demo_stats')||'{"total":0}'); s.votosOficiais=n; localStorage.setItem('demo_stats',JSON.stringify(s));
-    msg.textContent='Salvo! (demo)'; return;
-  }
-  try{ await setDoc(doc(fb.db,'stats','global'),{votosOficiais:n},{merge:true}); msg.textContent='✅ Salvo! Já aparece no app.'; }
+  if(DEMO){ const s=JSON.parse(localStorage.getItem('demo_stats')||'{"total":0}'); s.rjHabilitados=hab; s.votosOficiais=vot; localStorage.setItem('demo_stats',JSON.stringify(s)); msg.textContent='Salvo! (demo)'; return; }
+  try{ await setDoc(doc(fb.db,'stats','global'),{rjHabilitados:hab, votosOficiais:vot},{merge:true}); msg.textContent='✅ Salvo! Já aparece no app.'; }
   catch(e){ msg.textContent='Erro: '+e.message; }
 }
-window.salvarOficial=salvarOficial;
+window.salvarParticipacao=salvarParticipacao;
 
-async function rejeitar(codigo, uid){
-  if(!confirm('Rejeitar este comprovante? Libera o código e desconta 1 ponto.')) return;
-  if(DEMO){
-    const cods=JSON.parse(localStorage.getItem('demo_codigos')||'{}'); delete cods[codigo]; localStorage.setItem('demo_codigos',JSON.stringify(cods));
-    alert('No modo demo, o desconto de pontos não é aplicado. Configure o Firebase para o controle real.'); return;
-  }
+async function salvarFinal(){
+  const t=parseInt(document.getElementById('inFinTotal').value,10);
+  const m=parseInt(document.getElementById('inFinMiguel').value,10);
+  const msg=document.getElementById('finMsg');
+  if(isNaN(t)||isNaN(m)||t<0||m<0){ msg.textContent='Preencha os dois valores finais.'; return; }
+  msg.textContent='Salvando...';
+  if(DEMO){ const s=JSON.parse(localStorage.getItem('demo_stats')||'{"total":0}'); s.finalTotalRJ=t; s.finalMiguel=m; localStorage.setItem('demo_stats',JSON.stringify(s)); msg.textContent='Salvo! (demo)'; return; }
+  try{ await setDoc(doc(fb.db,'stats','global'),{finalTotalRJ:t, finalMiguel:m},{merge:true}); msg.textContent='✅ Resultado salvo! O vencedor aparece no app.'; }
+  catch(e){ msg.textContent='Erro: '+e.message; }
+}
+window.salvarFinal=salvarFinal;
+
+async function rejeitar(telefone, uid){
+  if(!confirm('Rejeitar este comprovante? Libera o telefone e desconta 1 ponto.')) return;
+  if(DEMO){ const cods=JSON.parse(localStorage.getItem('demo_codigos')||'{}'); delete cods[telefone]; localStorage.setItem('demo_codigos',JSON.stringify(cods)); alert('No modo demo, o desconto de pontos não é aplicado. Configure o Firebase.'); return; }
   try{
     await runTransaction(fb.db, async(tx)=>{
       tx.set(doc(fb.db,'apoiadores',uid),{pontos:increment(-1)},{merge:true});
       tx.set(doc(fb.db,'stats','global'),{total:increment(-1)},{merge:true});
     });
-    await deleteDoc(doc(fb.db,'comprovantes',codigo));
+    await deleteDoc(doc(fb.db,'comprovantes',telefone));
   }catch(e){ alert('Erro ao rejeitar: '+e.message); }
 }
 window.__rejeitar=rejeitar;
+
+function palpiteTxt(p, campo){ return (p && p[campo]!=null) ? Number(p[campo]).toLocaleString('pt-BR') : '—'; }
 
 function iniciar(){
   if(DEMO){
@@ -172,8 +186,9 @@ function iniciar(){
     lista.sort((a,b)=>(b.pontos||0)-(a.pontos||0));
     const stats=JSON.parse(localStorage.getItem('demo_stats')||'{"total":0}');
     pintar(stats.total||0, lista.length);
-    prefillOficial(stats.votosOficiais||0);
-    document.querySelector('#tRank tbody').innerHTML = lista.map((s,i)=>`<tr><td>${i+1}</td><td>${s.nome}</td><td>${s.pontos||0}</td></tr>`).join('')||'<tr><td colspan=3 class=muted>Sem apoiadores ainda</td></tr>';
+    prefill('inHab', stats.rjHabilitados||69583); prefill('inVot', stats.votosOficiais);
+    prefill('inFinTotal', stats.finalTotalRJ); prefill('inFinMiguel', stats.finalMiguel);
+    document.querySelector('#tRank tbody').innerHTML = lista.map((s,i)=>`<tr><td>${i+1}</td><td>${s.nome}</td><td>${s.pontos||0}</td><td>${palpiteTxt(s.palpite,'total')}</td><td>${palpiteTxt(s.palpite,'miguel')}</td></tr>`).join('')||'<tr><td colspan=5 class=muted>Sem apoiadores ainda</td></tr>';
     const cods=JSON.parse(localStorage.getItem('demo_codigos')||'{}');
     document.querySelector('#tComp tbody').innerHTML = Object.entries(cods).map(([c,dono])=>`<tr><td>—</td><td>—</td><td>${c}</td><td>${dono}</td><td><span class="tag ok">demo</span></td><td></td></tr>`).join('')||'<tr><td colspan=6 class=muted>Sem comprovantes (modo demo)</td></tr>';
     return;
@@ -181,10 +196,13 @@ function iniciar(){
   signInAnonymously(fb.auth).catch(()=>{});
   onSnapshot(query(collection(fb.db,'apoiadores'), orderBy('pontos','desc'), limit(500)), snap=>{
     const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
-    document.querySelector('#tRank tbody').innerHTML = rows.map((s,i)=>`<tr><td>${i+1}</td><td>${s.nome||'—'}</td><td>${s.pontos||0}</td></tr>`).join('')||'<tr><td colspan=3 class=muted>Sem apoiadores ainda</td></tr>';
+    document.querySelector('#tRank tbody').innerHTML = rows.map((s,i)=>`<tr><td>${i+1}</td><td>${s.nome||'—'}</td><td>${s.pontos||0}</td><td>${palpiteTxt(s.palpite,'total')}</td><td>${palpiteTxt(s.palpite,'miguel')}</td></tr>`).join('')||'<tr><td colspan=5 class=muted>Sem apoiadores ainda</td></tr>';
     window.__apoiadores=rows.length; window.__pinta();
   });
-  onSnapshot(doc(fb.db,'stats','global'), s=>{ const d=s.data()||{}; window.__total=d.total||0; window.__pinta(); prefillOficial(d.votosOficiais||0); });
+  onSnapshot(doc(fb.db,'stats','global'), s=>{ const d=s.data()||{}; window.__total=d.total||0; window.__pinta();
+    prefill('inHab', d.rjHabilitados||69583); prefill('inVot', d.votosOficiais);
+    prefill('inFinTotal', d.finalTotalRJ); prefill('inFinMiguel', d.finalMiguel);
+  });
   onSnapshot(query(collection(fb.db,'comprovantes'), orderBy('criadoEm','desc'), limit(500)), snap=>{
     const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
     document.querySelector('#tComp tbody').innerHTML = rows.map(c=>`<tr>
