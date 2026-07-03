@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta name="theme-color" content="#0a6ebd" />
-<title>Votômetro do Miguel 💧 | CREA-RJ Saneamento</title>
+<title>Vote no Miguel 🗳️ | CREA-RJ</title>
 <style>
   :root{
     --azul:#0a6ebd; --azul-esc:#074f8a; --azul-claro:#37b6f0;
@@ -23,13 +23,13 @@
   }
   .bolhas{position:fixed;inset:0;overflow:hidden;z-index:0;pointer-events:none}
   .bolha{position:absolute;bottom:-60px;border-radius:50%;
-    background:rgba(255,255,255,.18);animation:sobe linear infinite}
+    background:rgba(255,255,255,.14);animation:sobe linear infinite}
   @keyframes sobe{to{transform:translateY(-115vh)}}
   .wrap{position:relative;z-index:1;max-width:720px;margin:0 auto;padding:16px}
   .card{background:#fff;border-radius:22px;box-shadow:var(--sombra);padding:22px;margin-bottom:16px}
   h1,h2,h3{margin:0 0 10px}
   .logo{display:flex;align-items:center;gap:10px;justify-content:center;color:#fff;margin:8px 0 14px}
-  .logo .gota{font-size:34px}
+  .logo .mark{width:46px;height:46px;flex:0 0 46px}
   .logo b{font-size:22px;letter-spacing:.3px}
   .logo small{display:block;font-size:12px;opacity:.9;font-weight:400}
   button{font-family:inherit;cursor:pointer;border:0;border-radius:14px;font-weight:700;
@@ -47,6 +47,8 @@
   .muted{color:#5b7180;font-size:13px}
   .meta-num{font-size:44px;font-weight:800;color:var(--azul-esc);line-height:1}
   .meta-label{font-size:13px;color:#5b7180;margin-top:4px}
+  .oficial{background:linear-gradient(135deg,#074f8a,#0a6ebd);color:#fff}
+  .oficial .big{font-size:48px;font-weight:800;line-height:1;margin:10px 0 2px}
   .tanque{height:26px;background:#e6f2fb;border-radius:20px;overflow:hidden;margin:14px 0 6px;position:relative;border:2px solid #d4e8f7}
   .agua{height:100%;width:0;background:linear-gradient(90deg,var(--azul),var(--verde));border-radius:20px;
     transition:width 1s cubic-bezier(.2,.8,.2,1);position:relative}
@@ -55,8 +57,8 @@
     animation:flui 1s linear infinite}
   @keyframes flui{to{background-position:24px 0}}
   .avatar-box{display:flex;justify-content:center;margin:6px 0}
-  .avatar-box svg{width:150px;height:150px;filter:drop-shadow(0 8px 12px rgba(7,79,138,.25))}
-  .opcoes{display:grid;grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:8px;margin:8px 0}
+  .avatar-box svg{width:160px;height:160px;filter:drop-shadow(0 8px 12px rgba(7,79,138,.22))}
+  .opcoes{display:grid;grid-template-columns:repeat(auto-fit,minmax(64px,1fr));gap:8px;margin:8px 0}
   .op{border:2px solid #e2edf6;border-radius:12px;padding:8px;text-align:center;font-size:22px;background:#fff;cursor:pointer;transition:.15s}
   .op.sel{border-color:var(--azul);background:#eaf6ff;transform:scale(1.04)}
   .cores{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
@@ -64,7 +66,7 @@
   .cor.sel{box-shadow:0 0 0 3px var(--azul)}
   .rk{display:flex;align-items:center;gap:12px;padding:10px 8px;border-radius:14px;margin-bottom:8px;background:#f7fbfe}
   .rk .pos{font-weight:800;width:30px;text-align:center;color:var(--azul-esc);font-size:18px}
-  .rk .mini{width:44px;height:44px;flex:0 0 44px}
+  .rk .mini{width:46px;height:46px;flex:0 0 46px}
   .rk .nome{flex:1;font-weight:700;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .rk .pts{font-weight:800;color:var(--verde-esc);font-size:16px}
   .rk.eu{background:linear-gradient(135deg,#fff7d6,#fff);border:2px solid var(--amarelo)}
@@ -90,8 +92,8 @@
 <div class="wrap">
 
   <div class="logo">
-    <span class="gota">💧</span>
-    <b>Votômetro do Miguel<small>CREA-RJ • Água e Saneamento pra todos</small></b>
+    <span class="mark" id="logoAvatar"></span>
+    <b>Vote no Miguel<small>Cada voto conta • CREA-RJ</small></b>
   </div>
 
   <!-- ===== TELA 1: SENHA DE ACESSO ===== -->
@@ -105,22 +107,19 @@
 
   <!-- ===== TELA 2: CADASTRO + AVATAR ===== -->
   <div id="telaCadastro" class="card hidden">
-    <h2>Bora criar seu personagem! 🎨</h2>
-    <p class="muted">Monte a sua Gotinha do Saneamento e entre na disputa.</p>
+    <h2>Monte o seu Miguel! 🎨</h2>
+    <p class="muted">Personalize o personagem do Miguel e entre na disputa.</p>
 
     <div class="avatar-box"><div id="avatarPreview"></div></div>
 
-    <label>Cor da água</label>
+    <label>Cor de fundo</label>
     <div class="cores" id="cores"></div>
 
-    <label>Capacete / chapéu</label>
+    <label>Item / chapéu</label>
     <div class="opcoes" id="chapeus"></div>
 
     <label>Expressão</label>
     <div class="opcoes" id="expressoes"></div>
-
-    <label>Acessório</label>
-    <div class="opcoes" id="acessorios"></div>
 
     <label style="margin-top:12px;display:block">Seu nome ou apelido</label>
     <input id="inNome" maxlength="24" placeholder="Ex: Ana da Baixada" />
@@ -131,11 +130,19 @@
   <!-- ===== TELA 3: APP PRINCIPAL ===== -->
   <div id="telaApp" class="hidden">
 
+    <!-- Votos oficiais CONFEA-RJ -->
+    <div class="card center oficial">
+      <div class="badge" style="background:rgba(255,255,255,.22);color:#fff">🗳️ Votos contabilizados no Rio de Janeiro</div>
+      <div class="big" id="votosOficiais">—</div>
+      <div style="font-size:12px;opacity:.9">Fonte: vote.confea.org.br (RJ) • atualizado pela coordenação</div>
+    </div>
+
+    <!-- Meta da rede (comprovantes) -->
     <div class="card center">
-      <div class="badge">🎯 Meta da campanha</div>
+      <div class="badge">🎯 Comprovantes da nossa rede</div>
       <div class="tanque"><div class="agua" id="agua"></div></div>
-      <div><span class="meta-num" id="totalVotos">0</span> <span class="muted">/ 10.000 votos</span></div>
-      <div class="meta-label" id="faltam">Vamos encher o tanque! 💦</div>
+      <div><span class="meta-num" id="totalVotos">0</span> <span class="muted">/ 10.000</span></div>
+      <div class="meta-label" id="faltam">Bora bater a meta! 🚀</div>
     </div>
 
     <div class="abas">
@@ -145,7 +152,7 @@
 
     <div id="viewEnviar" class="card">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px">
-        <div id="meuAvatar" style="width:52px;height:52px;flex:0 0 52px"></div>
+        <div id="meuAvatar" style="width:56px;height:56px;flex:0 0 56px"></div>
         <div>
           <div style="font-weight:800" id="meuNome">—</div>
           <div class="pill"><span id="meusPontos">0</span> ponto(s)</div>
@@ -175,7 +182,7 @@
 
   </div>
 
-  <div class="rodape">Feito com 💧 para a campanha do Miguel • CREA-RJ</div>
+  <div class="rodape">Vote no Miguel • CREA-RJ 💪</div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -183,7 +190,7 @@
 <!-- ================= CONFIG ================= -->
 <script>
   /* ⚙️ 1) SENHA — troque aqui */
-  const SENHA_ACESSO = "saneamento2026";   // senha que os apoiadores usam
+  const SENHA_ACESSO = "Presidente2026";   // senha que os apoiadores usam
 
   /* ⚙️ 2) FIREBASE — cole a config do seu projeto (veja CONFIGURACAO.md).
      Enquanto os campos estiverem "COLE_AQUI", o site roda em MODO DEMO
@@ -200,56 +207,82 @@
   const META = 10000;
 </script>
 
-<!-- ================= AVATAR ================= -->
+<!-- ================= AVATAR DO MIGUEL ================= -->
 <script>
-  const CORES = ["#37b6f0","#0a6ebd","#20c997","#ffd23f","#ff7a59","#a06bff","#ff6fae","#00c2c7"];
-  const CHAPEUS = {nenhum:"🚫",capacete:"⛑️",bone:"🧢",coroa:"👑"};
-  const EXPRESSOES = {feliz:"😀",joia:"😎",apaixonada:"😍",determinada:"😤"};
-  const ACESSORIOS = {nenhum:"✖️",cano:"🔧",folha:"🌱",gota:"💧"};
+  const SKIN="#e9b491", SKIN_SH="#d69e79", BEARD="#241a12", BLAZER="#182741", BLAZER2="#101d31", SHIRT="#f4f7fb";
+  const CORES = ["#2f7ed8","#1c8f5a","#e0a800","#d9534f","#7a4ecf","#e8620f","#0fb5c7","#c2185b"];
+  const CHAPEUS = {nenhum:"🙅", capacete:"⛑️", bone:"🧢", cauboi:"🤠", coroa:"👑"};
+  const EXPRESSOES = {feliz:"😀", comemorando:"🥳", raiva:"😠"};
 
-  let avatar = {cor:"#37b6f0", chapeu:"capacete", exp:"feliz", ac:"cano"};
+  let avatar = {cor:"#2f7ed8", item:"capacete", exp:"feliz"};
+
+  function facePart(exp){
+    let eyes, brows, mouth;
+    if(exp==="comemorando"){
+      eyes='<path d="M81 92 Q86 87 91 92" stroke="#241a12" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M109 92 Q114 87 119 92" stroke="#241a12" stroke-width="3.4" fill="none" stroke-linecap="round"/>';
+      brows='<path d="M78 82 Q86 78 94 82" stroke="#241a12" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M106 82 Q114 78 122 82" stroke="#241a12" stroke-width="3.4" fill="none" stroke-linecap="round"/>';
+      mouth='<path d="M82 119 Q100 143 118 119 Q100 129 82 119 Z" fill="#6f2626"/><path d="M86 121 Q100 127 114 121 Z" fill="#fff"/>';
+    } else if(exp==="raiva"){
+      eyes='<circle cx="86" cy="93" r="4.2" fill="#241a12"/><circle cx="114" cy="93" r="4.2" fill="#241a12"/>';
+      brows='<path d="M78 86 L95 90" stroke="#241a12" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M122 86 L105 90" stroke="#241a12" stroke-width="4" fill="none" stroke-linecap="round"/>';
+      mouth='<path d="M86 130 Q100 122 114 130" stroke="#5c2020" stroke-width="4" fill="none" stroke-linecap="round"/>';
+    } else {
+      eyes='<circle cx="86" cy="92" r="4.2" fill="#241a12"/><circle cx="114" cy="92" r="4.2" fill="#241a12"/>';
+      brows='<path d="M79 84 Q86 81 93 84" stroke="#241a12" stroke-width="3.4" fill="none" stroke-linecap="round"/><path d="M107 84 Q114 81 121 84" stroke="#241a12" stroke-width="3.4" fill="none" stroke-linecap="round"/>';
+      mouth='<path d="M84 121 Q100 133 116 121 Q100 127 84 121 Z" fill="#7a2f2f"/><path d="M88 122 Q100 127 112 122 L112 124 Q100 128 88 124 Z" fill="#fff"/>';
+    }
+    return eyes+brows+mouth;
+  }
+
+  function hatPart(item){
+    switch(item){
+      case "capacete":
+        return '<path d="M62 66 Q62 38 100 38 Q138 38 138 66 Q100 58 62 66 Z" fill="#ffffff" stroke="#c2ccd6" stroke-width="2"/><path d="M96 40 Q100 38 104 40 L104 64 Q100 61 96 64 Z" fill="#e6ebf1"/><rect x="56" y="62" width="88" height="9" rx="4.5" fill="#eef2f6" stroke="#c2ccd6" stroke-width="1.5"/>';
+      case "bone":
+        return '<path d="M60 62 Q100 30 138 60 Q100 52 60 62 Z" fill="#c62828"/><path d="M58 61 Q40 60 34 68 Q52 66 62 65 Z" fill="#9e1c1c"/><circle cx="100" cy="48" r="11" fill="#ffffff" stroke="#c62828" stroke-width="2"/><text x="100" y="51.5" font-family="Arial" font-size="8" font-weight="bold" fill="#c62828" text-anchor="middle">VOTE</text>';
+      case "cauboi":
+        return '<path d="M36 66 Q60 74 100 74 Q140 74 164 66 Q140 78 100 78 Q60 78 36 66 Z" fill="#6b4321"/><path d="M38 66 Q100 46 162 66 Q140 72 100 72 Q60 72 38 66 Z" fill="#7a4e26"/><path d="M70 63 Q66 32 100 30 Q134 32 130 63 Q100 55 70 63 Z" fill="#7a4e26"/><rect x="70" y="56" width="60" height="8" rx="3" fill="#4f3018"/>';
+      case "coroa":
+        return '<path d="M66 58 L74 34 L88 52 L100 30 L112 52 L126 34 L134 58 Q100 50 66 58 Z" fill="#ffd23f" stroke="#e0a800" stroke-width="2"/><circle cx="74" cy="36" r="3" fill="#ff5d5d"/><circle cx="100" cy="32" r="3" fill="#5db0ff"/><circle cx="126" cy="36" r="3" fill="#5dff9e"/>';
+      default: return '';
+    }
+  }
 
   function avatarSVG(a, size){
-    a = a || {cor:'#37b6f0',chapeu:'nenhum',exp:'feliz',ac:'nenhum'};
-    size = size||150;
-    const olhos = {
-      feliz:'<circle cx="80" cy="120" r="7"/><circle cx="120" cy="120" r="7"/><path d="M82 140 Q100 155 118 140" stroke="#0c2233" stroke-width="5" fill="none" stroke-linecap="round"/>',
-      joia:'<rect x="66" y="112" width="30" height="14" rx="7" fill="#0c2233"/><rect x="104" y="112" width="30" height="14" rx="7" fill="#0c2233"/><rect x="96" y="117" width="8" height="4" fill="#0c2233"/><path d="M84 143 Q100 152 116 143" stroke="#0c2233" stroke-width="5" fill="none" stroke-linecap="round"/>',
-      apaixonada:'<path d="M80 116 l6 6 6-6 a4 4 0 0 0-6-2 a4 4 0 0 0-6 2z" fill="#d64545"/><path d="M114 116 l6 6 6-6 a4 4 0 0 0-6-2 a4 4 0 0 0-6 2z" fill="#d64545"/><path d="M82 140 Q100 156 118 140" stroke="#0c2233" stroke-width="5" fill="none" stroke-linecap="round"/>',
-      determinada:'<path d="M72 116 L92 122" stroke="#0c2233" stroke-width="5" stroke-linecap="round"/><path d="M128 116 L108 122" stroke="#0c2233" stroke-width="5" stroke-linecap="round"/><circle cx="82" cy="126" r="6"/><circle cx="118" cy="126" r="6"/><path d="M84 145 L116 145" stroke="#0c2233" stroke-width="5" stroke-linecap="round"/>'
-    }[a.exp] || '';
-    const chapeu = {
-      nenhum:'',
-      capacete:'<path d="M55 78 Q100 30 145 78 Z" fill="#ffffff" stroke="#b4c1cf" stroke-width="3"/><rect x="50" y="74" width="100" height="12" rx="6" fill="#e8edf2" stroke="#b4c1cf" stroke-width="2"/><rect x="94" y="40" width="12" height="34" fill="#d2dbe4"/>',
-      bone:'<path d="M58 80 Q100 34 142 80 Z" fill="#e63946"/><path d="M138 80 Q170 82 168 92 L138 90 Z" fill="#c1121f"/>',
-      coroa:'<path d="M62 72 L74 46 L88 66 L100 40 L112 66 L126 46 L138 72 Z" fill="#ffd23f" stroke="#f4a300" stroke-width="3"/>'
-    }[a.chapeu] || '';
-    const ac = {
-      nenhum:'',
-      cano:'<g transform="translate(120,150) rotate(20)"><rect x="0" y="0" width="46" height="16" rx="4" fill="#9aa7b2"/><rect x="-6" y="-4" width="12" height="24" rx="3" fill="#6c7a89"/><rect x="40" y="-4" width="12" height="24" rx="3" fill="#6c7a89"/></g>',
-      folha:'<path d="M132 96 Q166 78 160 120 Q126 126 132 96 Z" fill="#20c997"/><path d="M138 112 Q150 100 156 96" stroke="#0f9e79" stroke-width="3" fill="none"/>',
-      gota:'<path d="M150 92 C150 92 138 108 138 118 a12 12 0 0 0 24 0 C162 108 150 92 150 92 Z" fill="#37b6f0" stroke="#0a6ebd" stroke-width="2"/>'
-    }[a.ac] || '';
+    a = a || {cor:"#2f7ed8", item:"nenhum", exp:"feliz"};
+    // compat: se vier avatar antigo (com .chapeu), ignora e usa nenhum
+    const item = (a.item!==undefined) ? a.item : "nenhum";
+    size = size||160;
     return `<svg viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
-      <defs><radialGradient id="g${size}" cx="40%" cy="30%"><stop offset="0%" stop-color="#ffffff" stop-opacity=".65"/><stop offset="55%" stop-color="${a.cor}"/><stop offset="100%" stop-color="${a.cor}"/></radialGradient></defs>
-      <path d="M100 30 C100 30 45 105 45 140 a55 55 0 0 0 110 0 C155 105 100 30 100 30 Z" fill="url(#g${size})" stroke="rgba(0,0,0,.08)" stroke-width="2"/>
-      <ellipse cx="78" cy="95" rx="14" ry="10" fill="#fff" opacity=".45"/>
-      <g fill="#0c2233">${olhos}</g>
-      ${ac}
-      ${chapeu}
-    </svg>`;
+  <circle cx="100" cy="104" r="96" fill="${a.cor||'#2f7ed8'}" opacity="0.16"/>
+  <path d="M40 210 Q42 158 74 150 L126 150 Q158 158 160 210 Z" fill="${BLAZER}"/>
+  <path d="M84 150 L100 176 L116 150 Z" fill="${SHIRT}"/>
+  <path d="M84 150 L100 176 L92 152 Z" fill="${BLAZER2}"/>
+  <path d="M116 150 L100 176 L108 152 Z" fill="${BLAZER2}"/>
+  <circle cx="118" cy="182" r="2.5" fill="#3b82c4"/>
+  <path d="M88 138 L88 156 Q100 164 112 156 L112 138 Z" fill="${SKIN_SH}"/>
+  <ellipse cx="60" cy="100" rx="7" ry="11" fill="${SKIN}"/><ellipse cx="140" cy="100" rx="7" ry="11" fill="${SKIN}"/>
+  <path d="M62 92 Q60 50 100 50 Q140 50 138 92 Q138 132 100 140 Q62 132 62 92 Z" fill="${SKIN}"/>
+  <ellipse cx="84" cy="70" rx="16" ry="10" fill="#ffffff" opacity="0.12"/>
+  <path d="M62 92 Q64 128 100 150 Q136 128 138 92 Q132 112 120 116 Q110 120 100 120 Q90 120 80 116 Q68 112 62 92 Z" fill="${BEARD}"/>
+  <path d="M84 112 Q100 120 116 112 Q110 118 100 118 Q90 118 84 112 Z" fill="${BEARD}"/>
+  <path d="M62 92 Q60 78 66 74 Q70 96 74 104 Z" fill="${BEARD}"/>
+  <path d="M138 92 Q140 78 134 74 Q130 96 126 104 Z" fill="${BEARD}"/>
+  ${facePart(a.exp)}
+  <path d="M100 96 Q96 108 100 110 Q104 108 100 96" fill="${SKIN_SH}" opacity="0.7"/>
+  ${hatPart(item)}
+</svg>`;
   }
 
   function renderAvatar(){
-    document.getElementById('avatarPreview').innerHTML = avatarSVG(avatar,150);
+    document.getElementById('avatarPreview').innerHTML = avatarSVG(avatar,160);
   }
   function montarOpcoes(){
     const c = document.getElementById('cores');
     c.innerHTML = CORES.map(cor=>`<div class="cor ${cor===avatar.cor?'sel':''}" style="background:${cor}" onclick="setAv('cor','${cor}')"></div>`).join('');
     const mk=(obj,key)=>Object.entries(obj).map(([k,v])=>`<div class="op ${avatar[key]===k?'sel':''}" onclick="setAv('${key}','${k}')">${v}</div>`).join('');
-    document.getElementById('chapeus').innerHTML=mk(CHAPEUS,'chapeu');
+    document.getElementById('chapeus').innerHTML=mk(CHAPEUS,'item');
     document.getElementById('expressoes').innerHTML=mk(EXPRESSOES,'exp');
-    document.getElementById('acessorios').innerHTML=mk(ACESSORIOS,'ac');
   }
   function setAv(key,val){ avatar[key]=val; renderAvatar(); montarOpcoes(); }
 </script>
@@ -294,7 +327,7 @@ const DB = {
       if(codigos[chave]) return {status:'duplicado', dono:codigos[chave]};
       codigos[chave]=eu.nome; localStorage.setItem('demo_codigos',JSON.stringify(codigos));
       eu.pontos=(eu.pontos||0)+1; await this.salvarEu(eu);
-      const stats=JSON.parse(localStorage.getItem('demo_stats')||'{"total":0}'); stats.total++; localStorage.setItem('demo_stats',JSON.stringify(stats));
+      const stats=JSON.parse(localStorage.getItem('demo_stats')||'{"total":0}'); stats.total=(stats.total||0)+1; localStorage.setItem('demo_stats',JSON.stringify(stats));
       demoBroadcast(); return {status:'ok'};
     }
     let imagemUrl='';
@@ -319,16 +352,22 @@ const DB = {
   ouvirTotal(cb){
     if(DEMO){ demoTotalCb=cb; demoBroadcast(); return; }
     onSnapshot(doc(fb.db,'stats','global'), s=> cb((s.data()||{}).total||0));
+  },
+  ouvirOficial(cb){
+    if(DEMO){ demoOficialCb=cb; demoBroadcast(); return; }
+    onSnapshot(doc(fb.db,'stats','global'), s=> cb((s.data()||{}).votosOficiais||0));
   }
 };
 
-let demoRankCb=null, demoTotalCb=null;
+let demoRankCb=null, demoTotalCb=null, demoOficialCb=null;
 function demoBroadcast(){
   if(demoRankCb){
     const lista=[]; for(let k in localStorage){ if(k.startsWith('demo_sup_')){ const d=JSON.parse(localStorage[k]); if(d) lista.push({id:k,...d}); } }
     lista.sort((a,b)=>(b.pontos||0)-(a.pontos||0)); demoRankCb(lista.slice(0,50));
   }
-  if(demoTotalCb){ const s=JSON.parse(localStorage.getItem('demo_stats')||'{"total":0}'); demoTotalCb(s.total||0); }
+  const s=JSON.parse(localStorage.getItem('demo_stats')||'{"total":0}');
+  if(demoTotalCb){ demoTotalCb(s.total||0); }
+  if(demoOficialCb){ demoOficialCb(s.votosOficiais||0); }
 }
 window.addEventListener('storage', demoBroadcast);
 
@@ -357,6 +396,7 @@ window.dispatchEvent(new Event('dbpronto'));
 
   async function iniciar(){
     montarOpcoes(); renderAvatar();
+    document.getElementById('logoAvatar').innerHTML = avatarSVG({cor:'#2f7ed8', item:'bone', exp:'feliz'}, 46);
     if(window.__DEMO){ document.querySelector('.rodape').innerHTML='⚠️ MODO DEMO (dados só neste aparelho) — configure o Firebase para o ranking real. • CREA-RJ'; }
     if(sessionStorage.getItem('acesso')==='1'){ document.getElementById('telaSenha').classList.add('hidden'); rotaPosLogin(); }
   }
@@ -382,14 +422,15 @@ window.dispatchEvent(new Event('dbpronto'));
     const eu=window.__getEu();
     document.getElementById('telaApp').classList.remove('hidden');
     document.getElementById('meuNome').textContent=eu.nome;
-    document.getElementById('meuAvatar').innerHTML=avatarSVG(eu.avatar,52);
+    document.getElementById('meuAvatar').innerHTML=avatarSVG(eu.avatar,56);
     document.getElementById('meusPontos').textContent=eu.pontos||0;
+    window.__DB.ouvirOficial(v=>{ document.getElementById('votosOficiais').textContent=(v||0).toLocaleString('pt-BR'); });
     window.__DB.ouvirTotal(t=>{
       document.getElementById('totalVotos').textContent=t.toLocaleString('pt-BR');
       const pct=Math.min(100,(t/META)*100);
       document.getElementById('agua').style.width=pct+'%';
       const falta=Math.max(0,META-t);
-      document.getElementById('faltam').textContent = falta>0? `Faltam ${falta.toLocaleString('pt-BR')} votos pra meta! 💦` : '🎉 META BATIDA! Obrigado!';
+      document.getElementById('faltam').textContent = falta>0? `Faltam ${falta.toLocaleString('pt-BR')} comprovantes pra meta! 🚀` : '🎉 META BATIDA! Obrigado!';
     });
     window.__DB.ouvirRanking(lista=>{
       const meuNome=window.__getEu().nome;
@@ -399,7 +440,7 @@ window.dispatchEvent(new Event('dbpronto'));
         const pos=i+1; const euFlag=s.nome===meuNome;
         return `<div class="rk ${pos===1?'top1':''} ${euFlag?'eu':''}">
           <div class="pos">${medal(pos)||pos}</div>
-          <div class="mini">${avatarSVG(s.avatar,44)}</div>
+          <div class="mini">${avatarSVG(s.avatar,46)}</div>
           <div class="nome">${s.nome}${euFlag?' <span class="pill">você</span>':''}</div>
           <div class="pts">${s.pontos||0}</div>
         </div>`;
@@ -456,7 +497,7 @@ window.dispatchEvent(new Event('dbpronto'));
 
   function limparForm(){ fotoBlob=null; document.getElementById('inFoto').value=''; document.getElementById('inCodigo').value=''; document.getElementById('inEleitor').value=''; document.getElementById('preview').style.display='none'; document.getElementById('ocrStatus').textContent=''; }
 
-  function confete(){ for(let i=0;i<40;i++){ const c=document.createElement('div'); c.textContent=['💧','⭐','✅','🎉','🥇'][Math.floor(Math.random()*5)]; c.style.cssText=`position:fixed;left:${Math.random()*100}%;top:-20px;font-size:${14+Math.random()*18}px;z-index:60;pointer-events:none;transition:transform 2.2s ease-in,opacity 2.2s`; document.body.appendChild(c); requestAnimationFrame(()=>{ c.style.transform=`translateY(${window.innerHeight+40}px) rotate(${Math.random()*720}deg)`; c.style.opacity='0'; }); setTimeout(()=>c.remove(),2300);} }
+  function confete(){ for(let i=0;i<40;i++){ const c=document.createElement('div'); c.textContent=['🎉','⭐','✅','🗳️','🥇'][Math.floor(Math.random()*5)]; c.style.cssText=`position:fixed;left:${Math.random()*100}%;top:-20px;font-size:${14+Math.random()*18}px;z-index:60;pointer-events:none;transition:transform 2.2s ease-in,opacity 2.2s`; document.body.appendChild(c); requestAnimationFrame(()=>{ c.style.transform=`translateY(${window.innerHeight+40}px) rotate(${Math.random()*720}deg)`; c.style.opacity='0'; }); setTimeout(()=>c.remove(),2300);} }
 </script>
 </body>
 </html>

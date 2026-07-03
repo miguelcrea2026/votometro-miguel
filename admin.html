@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Painel Admin • Votômetro do Miguel</title>
+<title>Painel Admin • Vote no Miguel</title>
 <style>
   :root{--azul:#0a6ebd;--azul-esc:#074f8a;--verde:#20c997;--verde-esc:#0f9e79;--tinta:#0c2233;--sombra:0 10px 30px rgba(7,79,138,.15)}
   *{box-sizing:border-box}
@@ -38,7 +38,7 @@
 </style>
 </head>
 <body>
-<div class="top"><span style="font-size:24px">💧</span><b>Painel Admin — Votômetro do Miguel</b></div>
+<div class="top"><span style="font-size:24px">🗳️</span><b>Painel Admin — Vote no Miguel</b></div>
 
 <div class="wrap">
 
@@ -52,9 +52,19 @@
 
   <div id="painel" class="hidden">
     <div class="card">
-      <h3>🎯 Progresso da meta</h3>
+      <h3>🗳️ Votos contabilizados no Rio (CONFEA)</h3>
+      <p class="muted">Consulte o número em <b>vote.confea.org.br</b> (RJ) e atualize aqui. Ele aparece ao vivo para todos os apoiadores no topo do app.</p>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <input id="inOficial" type="number" min="0" placeholder="Ex: 1234" style="max-width:220px" />
+        <button class="btn-verde" onclick="salvarOficial()">Salvar</button>
+        <span id="oficialMsg" class="muted"></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🎯 Progresso da rede (comprovantes)</h3>
       <div class="kpis">
-        <div class="kpi"><div class="n" id="kTotal">0</div><div class="l">Votos confirmados</div></div>
+        <div class="kpi"><div class="n" id="kTotal">0</div><div class="l">Comprovantes recebidos</div></div>
         <div class="kpi"><div class="n" id="kFalta">10.000</div><div class="l">Faltam p/ meta</div></div>
         <div class="kpi"><div class="n" id="kApoiadores">0</div><div class="l">Apoiadores ativos</div></div>
         <div class="kpi"><div class="n" id="kPct">0%</div><div class="l">da meta (10.000)</div></div>
@@ -105,7 +115,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { getFirestore, doc, deleteDoc, collection, query, orderBy, limit, onSnapshot, runTransaction, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, setDoc, deleteDoc, collection, query, orderBy, limit, onSnapshot, runTransaction, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const DEMO = FIREBASE_CONFIG.apiKey === "COLE_AQUI";
 let fb=null;
@@ -121,6 +131,24 @@ function pintar(total, apoiadores){
   document.getElementById('kPct').textContent=pct.toFixed(1)+'%';
   document.getElementById('bar').style.width=pct+'%';
 }
+
+let oficialTocado=false;
+document.addEventListener('input', e=>{ if(e.target && e.target.id==='inOficial') oficialTocado=true; });
+function prefillOficial(v){ if(!oficialTocado){ const el=document.getElementById('inOficial'); if(el && v) el.value=v; } }
+
+async function salvarOficial(){
+  const n=parseInt(document.getElementById('inOficial').value,10);
+  const msg=document.getElementById('oficialMsg');
+  if(isNaN(n)||n<0){ msg.textContent='Digite um número válido'; return; }
+  msg.textContent='Salvando...';
+  if(DEMO){
+    const s=JSON.parse(localStorage.getItem('demo_stats')||'{"total":0}'); s.votosOficiais=n; localStorage.setItem('demo_stats',JSON.stringify(s));
+    msg.textContent='Salvo! (demo)'; return;
+  }
+  try{ await setDoc(doc(fb.db,'stats','global'),{votosOficiais:n},{merge:true}); msg.textContent='✅ Salvo! Já aparece no app.'; }
+  catch(e){ msg.textContent='Erro: '+e.message; }
+}
+window.salvarOficial=salvarOficial;
 
 async function rejeitar(codigo, uid){
   if(!confirm('Rejeitar este comprovante? Libera o código e desconta 1 ponto.')) return;
@@ -144,21 +172,19 @@ function iniciar(){
     lista.sort((a,b)=>(b.pontos||0)-(a.pontos||0));
     const stats=JSON.parse(localStorage.getItem('demo_stats')||'{"total":0}');
     pintar(stats.total||0, lista.length);
+    prefillOficial(stats.votosOficiais||0);
     document.querySelector('#tRank tbody').innerHTML = lista.map((s,i)=>`<tr><td>${i+1}</td><td>${s.nome}</td><td>${s.pontos||0}</td></tr>`).join('')||'<tr><td colspan=3 class=muted>Sem apoiadores ainda</td></tr>';
     const cods=JSON.parse(localStorage.getItem('demo_codigos')||'{}');
     document.querySelector('#tComp tbody').innerHTML = Object.entries(cods).map(([c,dono])=>`<tr><td>—</td><td>${c}</td><td>—</td><td>${dono}</td><td><span class="tag ok">demo</span></td><td></td></tr>`).join('')||'<tr><td colspan=6 class=muted>Sem comprovantes (modo demo)</td></tr>';
     return;
   }
   signInAnonymously(fb.auth).catch(()=>{});
-  // ranking + contagem de apoiadores
   onSnapshot(query(collection(fb.db,'apoiadores'), orderBy('pontos','desc'), limit(500)), snap=>{
     const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
     document.querySelector('#tRank tbody').innerHTML = rows.map((s,i)=>`<tr><td>${i+1}</td><td>${s.nome||'—'}</td><td>${s.pontos||0}</td></tr>`).join('')||'<tr><td colspan=3 class=muted>Sem apoiadores ainda</td></tr>';
     window.__apoiadores=rows.length; window.__pinta();
   });
-  // total
-  onSnapshot(doc(fb.db,'stats','global'), s=>{ window.__total=(s.data()||{}).total||0; window.__pinta(); });
-  // comprovantes
+  onSnapshot(doc(fb.db,'stats','global'), s=>{ const d=s.data()||{}; window.__total=d.total||0; window.__pinta(); prefillOficial(d.votosOficiais||0); });
   onSnapshot(query(collection(fb.db,'comprovantes'), orderBy('criadoEm','desc'), limit(500)), snap=>{
     const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
     document.querySelector('#tComp tbody').innerHTML = rows.map(c=>`<tr>
