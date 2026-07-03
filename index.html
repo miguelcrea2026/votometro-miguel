@@ -157,6 +157,7 @@
           <div style="font-weight:800" id="meuNome">—</div>
           <div class="pill"><span id="meusPontos">0</span> ponto(s)</div>
         </div>
+        <button class="btn-ghost" style="margin-left:auto;padding:9px 14px;font-size:13px" onclick="editarAvatar()">✏️ Editar</button>
       </div>
       <p class="muted">Cada comprovante de votação <b>diferente</b> vale 1 ponto. O primeiro a enviar aquele comprovante leva o ponto! 🥇</p>
 
@@ -411,12 +412,24 @@ window.dispatchEvent(new Event('dbpronto'));
   async function salvarCadastro(){
     const nome=document.getElementById('inNome').value.trim();
     if(nome.length<2){ toast('Escreva seu nome 🙂'); return; }
-    const eu={nome, avatar, pontos:0, criadoEm:Date.now()};
+    const atual=window.__getEu()||{};
+    const eu={nome, avatar:Object.assign({},avatar), pontos:atual.pontos||0, criadoEm:atual.criadoEm||Date.now()};
     window.__setEu(eu); await window.__DB.salvarEu(eu);
     document.getElementById('telaCadastro').classList.add('hidden');
     abrirApp();
   }
   window.salvarCadastro=salvarCadastro;
+
+  function editarAvatar(){
+    const eu=window.__getEu()||{};
+    avatar=Object.assign({cor:'#2f7ed8', item:'capacete', exp:'feliz'}, eu.avatar||{});
+    document.getElementById('inNome').value=eu.nome||'';
+    montarOpcoes(); renderAvatar();
+    document.getElementById('telaApp').classList.add('hidden');
+    document.getElementById('telaCadastro').classList.remove('hidden');
+    window.scrollTo(0,0);
+  }
+  window.editarAvatar=editarAvatar;
 
   function abrirApp(){
     const eu=window.__getEu();
