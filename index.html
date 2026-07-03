@@ -159,18 +159,17 @@
         </div>
         <button class="btn-ghost" style="margin-left:auto;padding:9px 14px;font-size:13px" onclick="editarAvatar()">✏️ Editar</button>
       </div>
-      <p class="muted">Cada comprovante de votação <b>diferente</b> vale 1 ponto. O primeiro a enviar aquele comprovante leva o ponto! 🥇</p>
+      <p class="muted">Cada pessoa que você levou pra votar vale <b>1 ponto</b>. Registre o nome e o telefone dela e anexe a foto do comprovante. Cada telefone conta uma vez — o primeiro a enviar leva o ponto! 🥇</p>
 
-      <label>Foto do comprovante</label>
-      <input id="inFoto" type="file" accept="image/*" capture="environment" onchange="lerFoto(event)" />
+      <label>Nome da pessoa que votou</label>
+      <input id="inVotante" placeholder="Nome completo" />
+
+      <label style="margin-top:10px;display:block">Telefone da pessoa que votou</label>
+      <input id="inTelefone" type="tel" inputmode="numeric" placeholder="(21) 99999-9999" />
+
+      <label style="margin-top:10px;display:block">Foto do comprovante (da galeria)</label>
+      <input id="inFoto" type="file" accept="image/*" onchange="lerFoto(event)" />
       <img id="preview" class="foto-preview" alt="prévia" />
-      <div id="ocrStatus" class="muted" style="height:18px;margin-top:6px"></div>
-
-      <label style="margin-top:10px;display:block">Código do comprovante</label>
-      <input id="inCodigo" placeholder="Detectado da foto (confira/ajuste)" />
-
-      <label style="margin-top:10px;display:block">Nome do eleitor no comprovante</label>
-      <input id="inEleitor" placeholder="Detectado da foto (confira/ajuste)" />
 
       <button class="btn-verde full" style="margin-top:16px" id="btnEnviar" onclick="enviarComprovante()">Marcar ponto ✅</button>
     </div>
@@ -288,9 +287,6 @@
   function setAv(key,val){ avatar[key]=val; renderAvatar(); montarOpcoes(); }
 </script>
 
-<!-- ================= TESSERACT (OCR) ================= -->
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-
 <!-- ================= APP (módulo) ================= -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -320,9 +316,9 @@ const DB = {
     if(DEMO){ localStorage.setItem('demo_sup_'+uid, JSON.stringify(data)); demoBroadcast(); return; }
     await setDoc(doc(fb.db,'apoiadores',uid), data, {merge:true});
   },
-  async enviar({codigo, eleitor, blob}){
-    const chave = codigo.trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
-    if(!chave) return {status:'semcodigo'};
+  async enviar({telefone, nome, blob}){
+    const chave = (telefone||'').replace(/\D/g,'');
+    if(chave.length<10) return {status:'semtelefone'};
     if(DEMO){
       const codigos = JSON.parse(localStorage.getItem('demo_codigos')||'{}');
       if(codigos[chave]) return {status:'duplicado', dono:codigos[chave]};
@@ -338,7 +334,7 @@ const DB = {
         const cref=doc(fb.db,'comprovantes',chave);
         const cs=await tx.get(cref);
         if(cs.exists()) throw {dup:true, dono:cs.data().apoiadorNome};
-        tx.set(cref,{codigo:chave, eleitor, apoiadorUid:uid, apoiadorNome:eu.nome, imagemUrl, status:'aprovado', criadoEm:serverTimestamp()});
+        tx.set(cref,{telefone:chave, nome, apoiadorUid:uid, apoiadorNome:eu.nome, imagemUrl, status:'aprovado', criadoEm:serverTimestamp()});
         tx.set(doc(fb.db,'apoiadores',uid),{pontos:increment(1)},{merge:true});
         tx.set(doc(fb.db,'stats','global'),{total:increment(1)},{merge:true});
       });
@@ -471,44 +467,32 @@ window.dispatchEvent(new Event('dbpronto'));
   window.troca=troca;
 
   let fotoBlob=null;
-  async function lerFoto(ev){
+  function lerFoto(ev){
     const f=ev.target.files[0]; if(!f) return;
     fotoBlob=f;
-    const url=URL.createObjectURL(f);
-    const img=document.getElementById('preview'); img.src=url; img.style.display='block';
-    const st=document.getElementById('ocrStatus'); st.innerHTML='🔎 Lendo o comprovante... <span class="spin"></span>';
-    try{
-      const {data}=await Tesseract.recognize(f,'por');
-      const texto=(data.text||'');
-      const mCod = texto.match(/\b[0-9]{5,}\b/) || texto.match(/\b[A-Z0-9]{6,}\b/i);
-      if(mCod && !document.getElementById('inCodigo').value) document.getElementById('inCodigo').value=mCod[0];
-      let nome='';
-      const lm=texto.match(/nome[:\s]+([A-ZÀ-Ú][A-ZÀ-Ú\s]{4,})/i);
-      if(lm) nome=lm[1].trim();
-      if(!nome){ const linhas=texto.split('\n').map(s=>s.trim()).filter(s=>/^[A-ZÀ-Ú][A-ZÀ-Ú\s]{6,}$/.test(s)); if(linhas[0]) nome=linhas[0]; }
-      if(nome && !document.getElementById('inEleitor').value) document.getElementById('inEleitor').value=nome.replace(/\s+/g,' ');
-      st.textContent = mCod ? '✅ Li o comprovante — confira os campos abaixo.' : '⚠️ Não achei o código automaticamente, digite abaixo.';
-    }catch(e){ st.textContent='⚠️ Não consegui ler — preencha os campos manualmente.'; }
+    const img=document.getElementById('preview'); img.src=URL.createObjectURL(f); img.style.display='block';
   }
   window.lerFoto=lerFoto;
 
   async function enviarComprovante(){
-    const codigo=document.getElementById('inCodigo').value.trim();
-    const eleitor=document.getElementById('inEleitor').value.trim();
+    const nome=document.getElementById('inVotante').value.trim();
+    const telefone=document.getElementById('inTelefone').value.trim();
+    const tel=telefone.replace(/\D/g,'');
+    if(!nome){ toast('Informe o nome da pessoa que votou'); return; }
+    if(tel.length<10){ toast('Informe um telefone válido com DDD 📱'); return; }
     if(!fotoBlob){ toast('Anexe a foto do comprovante 📸'); return; }
-    if(!codigo){ toast('Informe o código do comprovante'); return; }
     const btn=document.getElementById('btnEnviar'); btn.disabled=true; const orig=btn.innerHTML; btn.innerHTML='Enviando... <span class="spin"></span>';
     try{
-      const r=await window.__DB.enviar({codigo,eleitor,blob:fotoBlob});
+      const r=await window.__DB.enviar({telefone:tel, nome, blob:fotoBlob});
       if(r.status==='ok'){ toast('🎉 +1 ponto! Mandou bem!'); confete(); limparForm(); troca('rank'); }
-      else if(r.status==='duplicado'){ toast('😅 Esse comprovante já foi enviado'+(r.dono?(' por '+r.dono):'')+'.'); }
-      else if(r.status==='semcodigo'){ toast('Código inválido, confira.'); }
+      else if(r.status==='duplicado'){ toast('😅 Esse telefone já foi registrado'+(r.dono?(' por '+r.dono):'')+'.'); }
+      else if(r.status==='semtelefone'){ toast('Telefone inválido, confira.'); }
     }catch(e){ toast('Erro ao enviar. Tente de novo.'); console.error(e); }
     btn.disabled=false; btn.innerHTML=orig;
   }
   window.enviarComprovante=enviarComprovante;
 
-  function limparForm(){ fotoBlob=null; document.getElementById('inFoto').value=''; document.getElementById('inCodigo').value=''; document.getElementById('inEleitor').value=''; document.getElementById('preview').style.display='none'; document.getElementById('ocrStatus').textContent=''; }
+  function limparForm(){ fotoBlob=null; document.getElementById('inFoto').value=''; document.getElementById('inVotante').value=''; document.getElementById('inTelefone').value=''; document.getElementById('preview').style.display='none'; }
 
   function confete(){ for(let i=0;i<40;i++){ const c=document.createElement('div'); c.textContent=['🎉','⭐','✅','🗳️','🥇'][Math.floor(Math.random()*5)]; c.style.cssText=`position:fixed;left:${Math.random()*100}%;top:-20px;font-size:${14+Math.random()*18}px;z-index:60;pointer-events:none;transition:transform 2.2s ease-in,opacity 2.2s`; document.body.appendChild(c); requestAnimationFrame(()=>{ c.style.transform=`translateY(${window.innerHeight+40}px) rotate(${Math.random()*720}deg)`; c.style.opacity='0'; }); setTimeout(()=>c.remove(),2300);} }
 </script>

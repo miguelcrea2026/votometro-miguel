@@ -79,8 +79,8 @@
 
     <div class="card">
       <h3>🧾 Comprovantes recebidos</h3>
-      <p class="muted">Clique na foto para ampliar. Rejeitar libera o código e desconta o ponto de quem enviou.</p>
-      <div style="overflow-x:auto"><table id="tComp"><thead><tr><th>Foto</th><th>Código</th><th>Eleitor</th><th>Enviado por</th><th>Status</th><th></th></tr></thead><tbody></tbody></table></div>
+      <p class="muted">Clique na foto para ampliar. Rejeitar libera o telefone e desconta o ponto de quem enviou.</p>
+      <div style="overflow-x:auto"><table id="tComp"><thead><tr><th>Foto</th><th>Nome</th><th>Telefone</th><th>Enviado por</th><th>Status</th><th></th></tr></thead><tbody></tbody></table></div>
     </div>
   </div>
 
@@ -175,7 +175,7 @@ function iniciar(){
     prefillOficial(stats.votosOficiais||0);
     document.querySelector('#tRank tbody').innerHTML = lista.map((s,i)=>`<tr><td>${i+1}</td><td>${s.nome}</td><td>${s.pontos||0}</td></tr>`).join('')||'<tr><td colspan=3 class=muted>Sem apoiadores ainda</td></tr>';
     const cods=JSON.parse(localStorage.getItem('demo_codigos')||'{}');
-    document.querySelector('#tComp tbody').innerHTML = Object.entries(cods).map(([c,dono])=>`<tr><td>—</td><td>${c}</td><td>—</td><td>${dono}</td><td><span class="tag ok">demo</span></td><td></td></tr>`).join('')||'<tr><td colspan=6 class=muted>Sem comprovantes (modo demo)</td></tr>';
+    document.querySelector('#tComp tbody').innerHTML = Object.entries(cods).map(([c,dono])=>`<tr><td>—</td><td>—</td><td>${c}</td><td>${dono}</td><td><span class="tag ok">demo</span></td><td></td></tr>`).join('')||'<tr><td colspan=6 class=muted>Sem comprovantes (modo demo)</td></tr>';
     return;
   }
   signInAnonymously(fb.auth).catch(()=>{});
@@ -189,11 +189,11 @@ function iniciar(){
     const rows=snap.docs.map(d=>({id:d.id,...d.data()}));
     document.querySelector('#tComp tbody').innerHTML = rows.map(c=>`<tr>
       <td>${c.imagemUrl?`<img class="thumb" src="${c.imagemUrl}" onclick="abrirImg('${c.imagemUrl}')">`:'—'}</td>
-      <td><code>${c.codigo||c.id}</code></td>
-      <td>${c.eleitor||'—'}</td>
+      <td>${c.nome||'—'}</td>
+      <td>${c.telefone||c.id}</td>
       <td>${c.apoiadorNome||'—'}</td>
       <td><span class="tag ok">aprovado</span></td>
-      <td><button class="btn-vermelho" onclick="__rejeitar('${(c.codigo||c.id)}','${c.apoiadorUid}')">Rejeitar</button></td>
+      <td><button class="btn-vermelho" onclick="__rejeitar('${(c.telefone||c.id)}','${c.apoiadorUid}')">Rejeitar</button></td>
     </tr>`).join('')||'<tr><td colspan=6 class=muted>Nenhum comprovante ainda</td></tr>';
   });
 }
